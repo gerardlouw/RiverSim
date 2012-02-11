@@ -1,0 +1,16 @@
+
+public class Main {
+	public static void main(String args[])
+	{
+		int[] camps = new int [50];
+		
+	}
+	
+	public static void fillCamps(camps)
+	{
+		for(int i = 6; i <= 18; i++)
+		{
+			
+		}
+	}
+}

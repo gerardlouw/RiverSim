@@ -1,0 +1,30 @@
+
+public class Main {
+	public static void main(String args[])
+	{
+		int[] camps = new int [50];
+		
+	}
+	
+	public static void fillCamps(int [] camps)
+	{
+		for(int i = 6; i <= 18; i++)
+		{
+			
+		}
+	}
+	
+	public static void fillPipe(int [] camps, int code, int T)
+	{
+		int location = 0;
+		while( location < camps.length )
+		{
+			
+		}
+	}
+	
+	public static int getNextLocation(int location, int campsLength, int cT, int fT)
+	{
+		return campsLength/(fT - cT);
+	}
+}

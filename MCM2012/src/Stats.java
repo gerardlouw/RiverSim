@@ -18,6 +18,7 @@ public class Stats {
 	public final double OB_RANGE;
 	
 	public final double PRIORITY_BIAS;
+	public final double DEMAND_STDDEV;
 	
 	private int[] tripsTotalsOarBoat;
 	private int[] tripsTotalsMotorBoat;
@@ -30,7 +31,7 @@ public class Stats {
 	public Stats( int numCamps,
 				  int mbHours, int mbGoalAvg, int mbGoalVar,
 				  int obHours, int obGoalAvg, int obGoalVar,
-				  double priorityBias, double mbBias)
+				  double priorityBias, double mbBias, double demandStddev)
 	{
 		NUM_CAMPS = numCamps;
 		DELTA = Constants.RIVER_LENGTH / (NUM_CAMPS + 1);
@@ -48,6 +49,7 @@ public class Stats {
 		OB_RANGE = (int)(OB_HOURS * OarBoat.SPEED / DELTA);
 		
 		PRIORITY_BIAS = priorityBias;
+		DEMAND_STDDEV = demandStddev;
 	
 		tripsTotalsOarBoat = new int [Constants.MAX_DAYS + 4];
 		tripsTotalsMotorBoat = new int [Constants.MAX_DAYS + 4];
@@ -87,7 +89,7 @@ public class Stats {
 	
 	public void deadlock(int age)
 	{
-		campsPopulatedAverage -= age/(NUM_CAMPS*Constants.SIMUL_DAYS);
+		campsPopulatedAverage -= ((double)age)/(NUM_CAMPS*Constants.SIMUL_DAYS);
 		deadlocks++;
 	}
 	
@@ -229,12 +231,12 @@ public class Stats {
 		
 		for(int i = 0; i < campsPopulated.length; i++)
 		{
-			sb.append(String.format("%.2f ", campsPopulated[i]));
+			sb.append(String.format("%.2f ", campsPopulated[i] * 100));
 		}
 		
 		sb.append(" \n");
 		
-		String campPopAvg = String.format("Camp occupancy %%: average %.2f, variance %.2f\n", campsPopulatedAverage);
+		String campPopAvg = String.format("Camp occupancy %%: average %.2f, variance %.2f\n", campsPopulatedAverage * 100, getCampsPopulateVar() * 100);
 		sb.append(campPopAvg);
 		
 		String lateBoatsInfo = String.format("Late boats: %s\n", Arrays.toString(lateBoats));

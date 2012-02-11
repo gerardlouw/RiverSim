@@ -12,36 +12,28 @@ public class Main {
 		int obHours, obGoalAvg, obGoalVar;
 		double priorityBias, mbBias;
 		
-		numCamps = 3;
+		numCamps = 50;
 		mbHours = 12;
 		mbGoalAvg = 8;
 		mbGoalVar = 2;
 		mbBias = 0.5;
 		
-		obHours = 12;
-		obGoalAvg = 14;
+		obHours = 8;
+		obGoalAvg = 12;
 		obGoalVar = 2;
 		
 		priorityBias = 0.1;
 		
-		Stats s1 = new Stats(numCamps,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias, mbBias);
+		Stats s1 = new Stats(numCamps,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias, mbBias,1);
 		
-		runSim(s1);
-		System.out.println(s1);
-		
-		mbBias = 0;
-		priorityBias = 0.01;
-		s1 = new Stats(numCamps,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias, mbBias);
-		runSim(s1);
-		System.out.println(s1);
-		
-		for (int run = 1; run <= 10; run++) {
-			s1 = new Stats(numCamps,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias, mbBias);
+		double mb = mbBias;
+		for (int run = 1; run <= 1; run++) {
+			s1 = new Stats(numCamps,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias, mb,1);
 			runSim(s1);
 			double mbPercent = (double)s1.getTotalTripsMotorBoat() / s1.getTotalTrips();
-			mbBias *= 0.5 / mbPercent;
+			mb *= mbBias / mbPercent;
 		}
-		System.out.println(s1.MB_BIAS);
+		System.out.println(mb);
 		System.out.println(s1);
 	}
 	
@@ -50,10 +42,31 @@ public class Main {
 		PriorityQueue<Boat> boats = new PriorityQueue<Boat>();
 		PriorityQueue<Boat> boats_bak = new PriorityQueue<Boat>();
 		
+		//double [] campsDemand = new double[stats.NUM_CAMPS];
 		boolean[] occupied = new boolean[stats.NUM_CAMPS + 1];
+		int mbcount = 0;
+		int obcount = 0;
 		for (int days = 1; days <= Constants.SIMUL_DAYS; days++) {
 			
-				Arrays.fill(occupied, false);
+			// Calculate demand
+			//Arrays.fill(campsDemand, 0);
+			/*double ampScale = 1.0/stats.NUM_CAMPS;
+			for(Boat b : boats)
+			{
+				int lowerBound;
+				int upperBound;
+				int goal;
+				
+				lowerBound = b.getLocation() + 1;
+				upperBound = Math.min(stats.NUM_CAMPS - 1,b.getLocation() + b.getRange());
+				goal = b.getDestination();
+				
+				for (int i = lowerBound; i <= upperBound; i++) {
+					campsDemand[i] += ampScale*Math.exp(-0.5 * Math.pow((i - goal) / stats.DEMAND_STDDEV, 2));
+				}
+			}*/
+			
+			Arrays.fill(occupied, false);
 			while (!boats.isEmpty())
 			{
 				Boat top = boats.poll();
@@ -81,10 +94,18 @@ public class Main {
 				if (occupied[i]) continue;
 				Boat b;
 				if(i < stats.OB_RANGE){
-					b = (Constants.RANDOM.nextDouble() < stats.MB_BIAS) ? new MotorBoat(stats) : new OarBoat(stats);
+					if (mbcount > obcount){
+						b = new OarBoat(stats);
+						obcount++;
+					}else{
+						b = new MotorBoat(stats);
+						mbcount++;
+					}
+					//b = (Constants.RANDOM.nextDouble() < stats.MB_BIAS) ? new MotorBoat(stats) : new OarBoat(stats);
 				}
 				else{
 					b = new MotorBoat(stats);
+					mbcount++;
 				}
 				b.setLocation(i);
 				occupied[i] = true;
@@ -93,5 +114,7 @@ public class Main {
 			
 			stats.completeDay(days,occupied);
 		}
+		
+		//System.out.println("Demand: "+ Arrays.toString(campsDemand));
 	}
 }

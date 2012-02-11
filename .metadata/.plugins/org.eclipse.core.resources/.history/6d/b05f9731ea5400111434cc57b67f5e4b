@@ -1,0 +1,46 @@
+
+public class Main {
+	public static void main(String args[])
+	{
+		int[] camps = new int [50];
+		
+	}
+	
+	public static void fillCamps(int [] camps)
+	{
+		for(int i = 6; i <= 18; i++)
+		{
+			
+		}
+	}
+	
+	public static void fillPipe(int [] camps, int id, int T)
+	{
+		int location = 0;
+		int cT = 0;
+		while( location < camps.length )
+		{
+			location = getNextLocation(location, camps.length, cT, T);
+			if(camps[location] == 0)
+			{
+				camps[location] = id;
+			}
+			else
+			{
+				// Find another spot
+				int deviation = 1;
+				while(true)
+				{
+					// Search right
+					
+					// Search left
+				}
+			}
+		}
+	}
+	
+	public static int getNextLocation(int location, int campsLength, int cT, int fT)
+	{
+		return location + (campsLength-location)/(fT - cT);
+	}
+}

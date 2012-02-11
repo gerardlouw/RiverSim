@@ -1,0 +1,24 @@
+
+public class Main {
+	public static void main(String args[])
+	{
+		int[] camps = new int [50];
+		
+	}
+	
+	public static void fillCamps(int [] camps)
+	{
+		for(int i = 6; i <= 18; i++)
+		{
+			
+		}
+	}
+	
+	public static void fillPipe(int [] camps, int code)
+	{
+		for(int i = 0; i < camps.length; i++)
+		{
+			
+		}
+	}
+}
