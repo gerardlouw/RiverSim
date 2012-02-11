@@ -11,9 +11,9 @@ public abstract class Boat implements Comparable<Boat> {
 	
 	public Boat(double speed, double hours, double goalAvg, double goalVar, Stats s) {
 		range = (int) (speed * hours / s.DELTA);
-		daysLeft = (int)Math.round(goalAvg + (2 * Constants.RANDOM.nextDouble() - 1) * goalVar);
-		tripDays = daysLeft;
+		daysLeft = (int)Math.round(goalAvg + (2 * Constants.RANDOM.nextDouble() - 1) * (goalVar + 0.5));
 		//daysLeft = (int)Math.round(Constants.RANDOM.nextGaussian() * goalVar/2 + goalAvg);
+		tripDays = daysLeft;
 		distLeft = s.NUM_CAMPS+1;
 		this.s = s;
 	}

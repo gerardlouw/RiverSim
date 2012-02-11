@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="15" version="2.0">
+<workbench progressCount="14" version="2.0">
 <workbenchAdvisor/>
-<window height="768" width="1024" x="176" y="176">
+<window height="768" maximized="true" width="1024" x="176" y="176">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -13,9 +13,11 @@
 <coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="124" y="22"/>
 <coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="98" y="22"/>
 <coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="61" y="22"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="37" y="22"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="185" y="22"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
@@ -24,10 +26,26 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.internal.presentations.r33.WorkbenchPresentationFactory_33"/>
+<presentation id="org.eclipse.ui.internal.presentations.r33.WorkbenchPresentationFactory_33">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Main.java" partName="Main.java" path="C:/Documents and Settings/16033493/My Documents/RiverSim/MCM2012/src/Main.java" title="Main.java" tooltip="MCM2012/src/Main.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/MCM2012/src/Main.java"/>
+<editorState selectionHPixel="0" selectionLength="0" selectionOffset="2469"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Stats.java" partName="Stats.java" path="C:/Documents and Settings/16033493/My Documents/RiverSim/MCM2012/src/Stats.java" title="Stats.java" tooltip="MCM2012/src/Stats.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/MCM2012/src/Stats.java"/>
+<editorState selectionHPixel="0" selectionLength="0" selectionOffset="1420"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Boat.java" partName="Boat.java" path="C:/Documents and Settings/16033493/My Documents/RiverSim/MCM2012/src/Boat.java" title="Boat.java" tooltip="MCM2012/src/Boat.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/MCM2012/src/Boat.java"/>
+<editorState selectionHPixel="0" selectionLength="0" selectionOffset="295"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.jdt.ui.TypeHierarchy" partName="Hierarchy"/>
@@ -39,6 +57,9 @@
 <columnOrder columnOrderIndex="3"/>
 <columnOrder columnOrderIndex="4"/>
 </viewState>
+</view>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
+<viewState/>
 </view>
 <view id="org.eclipse.jdt.ui.PackageExplorer" partName="Package Explorer">
 <viewState group_libraries="1" isWindowWorkingSet="true" layout="2" linkWithEditor="0" rootMode="1" workingSetName="">
@@ -73,7 +94,7 @@
 <view id="org.eclipse.jdt.ui.SourceView" partName="Declaration"/>
 <view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
 </views>
-<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.jdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.jdt.ui.JavaPerspective" label="Java"/>
 <alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
@@ -126,6 +147,7 @@
 <view id="org.eclipse.ui.views.ProblemView"/>
 <view id="org.eclipse.jdt.ui.JavadocView"/>
 <view id="org.eclipse.jdt.ui.SourceView"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <fastViewBars/>
 <layout>
@@ -151,19 +173,20 @@
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.25" ratioLeft="252" ratioRight="756" relationship="2" relative="left"/>
-<info folder="true" part="bottom" ratio="0.7492997" ratioLeft="535" ratioRight="179" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ProblemView" appearance="2" expanded="2">
+<info folder="true" part="bottom" ratio="0.60379463" ratioLeft="541" ratioRight="355" relationship="4" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
 <page content="org.eclipse.jdt.ui.SourceView" label="Declaration"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
-<page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.internal.presentations.r33.WorkbenchPresentationFactory_33">
 <part id="0"/>
 <part id="1"/>
 <part id="2"/>
+<part id="3"/>
 </presentation>
 </folder>
 </info>
@@ -181,7 +204,163 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/MCM2012/src/Main.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/MCM2012/src/Stats.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/MCM2012/src/Boat.java"/>
+</editors>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="6983" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="635" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1846" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="817" y="14"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="855" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="854" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="813" y="44"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="991" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="813" y="44"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="883" y="45"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="846" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="987" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="902" y="25"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1846" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1842" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="6791" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1165" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="487" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1165" y="0"/>
+</item>
+<item historyLabel="Boat.java" index="2">
+<position info="not_deleted" x="639" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1898" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="1034" y="0"/>
+</item>
+<item historyLabel="Boat.java" index="2">
+<position info="not_deleted" x="276" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="532" y="0"/>
+</item>
+<item historyLabel="Boat.java" index="2">
+<position info="not_deleted" x="295" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="605" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="1034" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="605" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="351" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1220" y="0"/>
+</item>
+<item historyLabel="Boat.java" index="2">
+<position info="not_deleted" x="295" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="825" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1719" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="825" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="6804" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="6764" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1719" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1577" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1786" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1784" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="1784" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="749" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="6764" y="0"/>
+</item>
+<item historyLabel="Boat.java" index="2">
+<position info="not_deleted" x="295" y="0"/>
+</item>
+<item historyLabel="Main.java" index="0">
+<position info="not_deleted" x="749" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="3645" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="1420" y="0"/>
+</item>
+<item historyLabel="Boat.java" index="2">
+<position info="not_deleted" x="295" y="0"/>
+</item>
+<item historyLabel="Stats.java" index="1">
+<position info="not_deleted" x="1420" y="0"/>
+</item>
+<item active="true" historyLabel="Main.java" index="0">
+<position info="not_deleted" x="749" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -197,5 +376,18 @@
 </trimArea>
 </trimLayout>
 </window>
-<mruList/>
+<mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Boat.java" tooltip="MCM2012/src/Boat.java">
+<persistable path="/MCM2012/src/Boat.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Stats.java" tooltip="MCM2012/src/Stats.java">
+<persistable path="/MCM2012/src/Stats.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Main.java" tooltip="MCM2012/src/Main.java">
+<persistable path="/MCM2012/src/Main.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Main.java" tooltip="RiverPipes/src/Main.java">
+<persistable path="/RiverPipes/src/Main.java"/>
+</file>
+</mruList>
 </workbench>

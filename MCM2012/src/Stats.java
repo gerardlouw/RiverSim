@@ -1,3 +1,5 @@
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.Arrays;
 
 
@@ -10,7 +12,6 @@ public class Stats {
 	public final double MB_GOAL_AVG;
 	public final double MB_GOAL_VAR;
 	public final double MB_RANGE;
-	public double MB_BIAS;
 	
 	public final double OB_HOURS;
 	public final double OB_GOAL_AVG;
@@ -18,7 +19,6 @@ public class Stats {
 	public final double OB_RANGE;
 	
 	public final double PRIORITY_BIAS;
-	public final double DEMAND_STDDEV;
 	
 	private int[] tripsTotalsOarBoat;
 	private int[] tripsTotalsMotorBoat;
@@ -29,9 +29,9 @@ public class Stats {
 	private double campsPopulatedAverage;
 	
 	public Stats( int numCamps,
-				  int mbHours, int mbGoalAvg, int mbGoalVar,
-				  int obHours, int obGoalAvg, int obGoalVar,
-				  double priorityBias, double mbBias, double demandStddev)
+				  double mbHours, double mbGoalAvg, double mbGoalVar,
+				  double obHours, double obGoalAvg, double obGoalVar,
+				  double priorityBias)
 	{
 		NUM_CAMPS = numCamps;
 		DELTA = Constants.RIVER_LENGTH / (NUM_CAMPS + 1);
@@ -39,7 +39,6 @@ public class Stats {
 		MB_HOURS = mbHours;
 		MB_GOAL_AVG = mbGoalAvg;
 		MB_GOAL_VAR = mbGoalVar;
-		MB_BIAS = mbBias;
 		
 		OB_HOURS = obHours;
 		OB_GOAL_AVG = obGoalAvg;
@@ -49,10 +48,9 @@ public class Stats {
 		OB_RANGE = (int)(OB_HOURS * OarBoat.SPEED / DELTA);
 		
 		PRIORITY_BIAS = priorityBias;
-		DEMAND_STDDEV = demandStddev;
 	
-		tripsTotalsOarBoat = new int [Constants.MAX_DAYS + 4];
-		tripsTotalsMotorBoat = new int [Constants.MAX_DAYS + 4];
+		tripsTotalsOarBoat = new int [Constants.MAX_DAYS + 10];
+		tripsTotalsMotorBoat = new int [Constants.MAX_DAYS + 10];
 		campsPopulated = new double [Constants.SIMUL_DAYS];
 		deadlocks = 0;
 		lateBoats = new int [3];
@@ -246,6 +244,42 @@ public class Stats {
 		sb.append(earlyBoatsInfo);
 		
 		return sb.toString();
+	}
+	
+	public static void writeHeader(BufferedWriter sf)
+	{
+		try {
+			sf.write("NUM_CAMPS,MB_TRIPS,OB_TRIPS,TOTAL_TRIPS,OPTIMAL_TRIPS_TOTAL,CAMP_POPULATION_PERCENTAGE\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void writeFileEntry(BufferedWriter sf, BufferedWriter mbf, BufferedWriter obf)
+	{
+		try {
+			sf.write(String.format("%d,%d,%d,%d,%f,%f\n",NUM_CAMPS,getTotalTripsMotorBoat(), getTotalTripsOarBoat(),getTotalTrips(), optimalTripsTotal(),campsPopulatedAverage));
+			for(int i = 0; i < tripsTotalsMotorBoat.length; i++)
+			{
+				mbf.write(tripsTotalsMotorBoat[i]+"");
+				if(i != tripsTotalsMotorBoat.length - 1)
+					mbf.write(",");
+				else
+					mbf.write('\n');
+			}
+			for(int i = 0; i < tripsTotalsOarBoat.length; i++)
+			{
+				obf.write(tripsTotalsOarBoat[i]+"");
+				if(i != tripsTotalsOarBoat.length - 1)
+					obf.write(",");
+				else
+					obf.write('\n');
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

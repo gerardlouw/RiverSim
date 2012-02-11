@@ -1,0 +1,34 @@
+mbf = dlmread('mbf.txt',',');
+obf = dlmread('obf.txt',',');
+
+mb = mean(mbf,1);
+ob = mean(obf,1);
+
+total = mb + ob;
+
+hold on;
+grid on;
+
+plot(mb,'r');
+plot(ob,'b');
+plot(total,'k');
+axis([4 20 0 max(total)]);
+set(gca,'XTick',4:1:20)
+
+hold off;
+
+[numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occupationPercentage] = textread('num_camps_sf.txt','%d,%d,%d,%d,%f,%f','headerlines',1);
+
+
+for i=1:200
+    numCamps(i*10-9:i*10)
+end
+
+figure;
+hold on;
+plot(numCamps, totalTrips, 'r', numCamps, optimalTripsTotal, 'b');
+plot(numCamps,mbTrips,'g',numCamps,obTrips,'k');
+hold off;
+
+figure;
+plot(numCamps,occupationPercentage);

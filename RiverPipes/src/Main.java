@@ -4,16 +4,29 @@ import java.util.Arrays;
 public class Main {
 	public static void main(String args[])
 	{
-		int[] camps = new int [50];
-		
+		int[] camps = new int [2*44];
+		fillCamps(camps);
 	}
 	
 	public static void fillCamps(int [] camps)
 	{
-		for(int i = 6; i <= 18; i++)
+		fillPipe(camps,7,7);
+		fillPipe(camps,11,11);
+		fillPipe(camps,13,13);
+		fillPipe(camps,17,17);
+		
+		fillPipe(camps,79,7);
+		fillPipe(camps,119,11);
+		fillPipe(camps,139,13);
+		fillPipe(camps,179,17);
+		/*for(int i = 6; i <= 18; i+=2)
 		{
 			fillPipe(camps,i,i);
 		}
+		for(int i = 7; i <= 18; i+=2)
+		{
+			fillPipe(camps,i,i);
+		}*/
 		System.out.println(Arrays.toString(camps));
 	}
 	
@@ -23,7 +36,6 @@ public class Main {
 		int cT = 0;
 		while( location < camps.length )
 		{
-			location = getNextLocation(location, camps.length, cT, T);
 			if(camps[location] == 0)
 			{
 				camps[location] = id;
@@ -37,7 +49,7 @@ public class Main {
 					int iR = location + deviation;
 					int iL = location - deviation;
 					boolean iRr = iR < camps.length;
-					boolean iLr = iR > 0;
+					boolean iLr = iL > 0;
 					
 					// Search left
 					if(iLr)
@@ -54,12 +66,15 @@ public class Main {
 							break;
 						}
 						
-					if(!iRr && !iLr)
+					if((!iRr) && (!iLr))
 						break;
 					deviation++;
 				}
 			}
+			cT++;
+			location = getNextLocation(location, camps.length, cT, T);
 		}
+		System.out.println("cT "+(cT+1)+" : T " + T);
 	}
 	
 	public static int getNextLocation(int location, int campsLength, int cT, int fT)
