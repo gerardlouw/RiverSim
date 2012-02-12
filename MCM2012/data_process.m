@@ -7,17 +7,28 @@ close all;
 
 figure
 hold on;
-title('Number of Trips vs Campsites');
 plot(numCamps,mbTrips,'r');
 plot(numCamps,obTrips,'b');
 plot(numCamps,totalTrips,'k');
 plot(numCamps,optimalTripsTotal,'g');
+legend('Motorboat trips', 'Oarboat trips', 'Total trips', 'Theoretical throughput','Location','Best');
+ylabel('Trips','FontSize',14);
+xlabel('Number of campsites ( Y )','FontSize',14);
+set(gca,'FontSize',14);
 grid();
+print ('inc_camp_count', '-dpdf');
+print ('inc_camp_count', '-dpng');
 hold off;
 
 figure
-title('Occ per');
-plot(numCamps, occPer);
+plot(numCamps, occPer*100);
+ylabel('Campsite occupation percentage ( % )','FontSize',14);
+xlabel('Number of campsites ( Y )','FontSize',14);
+set(gca,'FontSize',14);
+grid();
+print ('inc_camp_count_occu', '-dpdf');
+print ('inc_camp_count_occu', '-dpng');
+
 
 % Process distrobutions
 

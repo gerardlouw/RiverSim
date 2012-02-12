@@ -7,11 +7,15 @@ close all;
 
 figure
 hold on;
-title('Number of Trips vs Campsites');
 plot(numCamps,mbTrips,'r');
 plot(numCamps,obTrips,'b');
 plot(numCamps,totalTrips,'k');
 plot(numCamps,optimalTripsTotal,'g');
+legend('Motorboat trips', 'Oarboat trips', 'Total trips', 'Theoretical throughput',,'Location','Best');
+xlabel('Trips','FontSize',14);
+ylabel('Number of campsites ( Y )','FontSize',14);
+set(gca,'FontSize',14);
+grid();
 hold off;
 
 figure
@@ -20,10 +24,10 @@ plot(numCamps, occPer);
 
 % Process distrobutions
 
-% linearDistro
-for i:25
-plotBestDistro('linp_dis', 135, 'Linear Positive');
-plotBestDistro('linn_dis', 135, 'Linear Negative');
-plotBestDistro('normal_dis', 135, 'Normal');
-plotBestDistro('uni_dis', 135, 'Uniform');
-plotBestDistro('sin_dis', 135, 'Sine');
+for i=45:45:225,
+    plotBestDistro('linp_dis', i, ['Positive Linear ( Y = ' int2str(i) ' )']);
+    plotBestDistro('linn_dis', i, ['Negative Linear ( Y = ' int2str(i) ' )']);
+    plotBestDistro('normal_dis', i, ['Gaussian ( Y = ' int2str(i) ' )']);
+    plotBestDistro('uni_dis', i, ['Uniform ( Y = ' int2str(i) ' )']);
+    plotBestDistro('sin_dis', i, ['Sinusoidal ( Y = ' int2str(i) ' )']);
+end
