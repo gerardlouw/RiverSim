@@ -1,5 +1,4 @@
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,71 +11,148 @@ public class Main {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		int numCamps;
-		double mbHours, mbGoalAvg, mbGoalVar;
-		double obHours, obGoalAvg, obGoalVar;
-		double priorityBias, mbBias;
 		
-		numCamps = 50;
-		/*mbHours = 12;
-		mbGoalAvg = 9;
-		mbGoalVar = 3.5;
-		mbBias = 0.5;
-		
-		obHours = 8;
-		obGoalAvg = 16;
-		obGoalVar = 3;*/
-		
-		mbHours = 12;
-		mbGoalAvg = 9;
-		mbGoalVar = 3.5;
-		mbBias = 0.5;
-		
-		obHours = 8;
-		obGoalAvg = 16;
-		obGoalVar = 3;
-		
-		priorityBias = 0.1;
-		
-		Stats s1;
-		
-		BufferedWriter sf = new BufferedWriter(new FileWriter("sf.txt"));
-		BufferedWriter mbf = new BufferedWriter(new FileWriter("mbf.txt"));
-		BufferedWriter obf = new BufferedWriter(new FileWriter("obf.txt"));
-		
-		Stats.writeHeader(sf);
-		
-		for(int i = 0; i < 1000; i++){
-			s1 = new Stats(numCamps,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias);
-			runSim(s1);
-			s1.writeFileEntry(sf, mbf, obf);
+		generateStats_IncreasingCampsCount();
+		for(int numCamps = 225; numCamps > 0; numCamps -= 225/5)
+		{
+			generateStats_Distrobutions(numCamps);
 		}
 		
-		sf.close();
-		mbf.close();
-		obf.close();
+	}
+	
+	public static void generateStats_IncreasingCampsCount() throws IOException
+	{
+		int ITERATIONS = 10;
+		System.out.println("Generating in increasing camps count stats...");
+		BufferedWriter sf = new BufferedWriter(new FileWriter("inc_camp_count_df.txt"));
+		BufferedWriter mbf = new BufferedWriter(new FileWriter("inc_camp_count_mbf.txt"));
+		BufferedWriter obf = new BufferedWriter(new FileWriter("inc_camp_count_obf.txt"));
+		Stats.writeHeader(sf,mbf,obf,ITERATIONS);
 		
-		sf = new BufferedWriter(new FileWriter("num_camps_sf.txt"));
-		mbf = new BufferedWriter(new FileWriter("num_camps_mbf.txt"));
-		obf = new BufferedWriter(new FileWriter("num_camps_obf.txt"));
+		Stats s;
+		double[] mbProbs = uniformDistro(Constants.MIN_DAYS,(Constants.MAX_DAYS+Constants.MIN_DAYS)/2);
+		double[] obProbs = uniformDistro((Constants.MAX_DAYS+Constants.MIN_DAYS)/2,Constants.MAX_DAYS);
+		double mb_div_ob = 1;
 		
-		Stats.writeHeader(sf);
-		
-		for(int i = 2; i < 200; i++){
-			for(int ii = 0; ii < 20; ii++)
+		System.out.print("Number of camps: ");
+		for(int numCamps = 20; numCamps < 200; numCamps++)
+		{
+			for(int i = 0; i < ITERATIONS; i++)
 			{
-				s1 = new Stats(i,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias);
-				runSim(s1);
-				s1.writeFileEntry(sf, mbf, obf);
+				s = new Stats(numCamps,Constants.STD_MB_HOURS,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob);
+				runSim(s);
+				s.writeFileEntry(sf, mbf, obf);
 			}
-			if(i % 10 == 0)
-				System.out.println(i);
+			System.out.printf("%d ",numCamps);
+			if((numCamps+1) % 30 == 0)
+				System.out.println();
+		}
+		System.out.println();
+		
+		sf.close();
+		mbf.close();
+		obf.close();
+	}
+	
+	public static void generateStats_Distrobutions(int numCamps) throws IOException
+	{
+		int ITERATIONS = 100;
+		System.out.printf("Generating distrobution stats for %d camp sites...\n",numCamps);
+		generateStats_uniDistro(numCamps, ITERATIONS);
+		generateStats_normalDistro(numCamps, ITERATIONS);
+		generateStats_linDistro(numCamps, ITERATIONS);
+		generateStats_sineDistro(numCamps, ITERATIONS);
+	}
+	
+	public static void generateStats_uniDistro(int numCamps, int ITERATIONS) throws IOException
+	{
+		System.out.printf("Generating uniform distrobutions...\n");
+
+		double[] mbProbs = uniformDistro(Constants.MIN_DAYS,(Constants.MAX_DAYS+Constants.MIN_DAYS)/2);
+		double[] obProbs = uniformDistro((Constants.MAX_DAYS+Constants.MIN_DAYS)/2,Constants.MAX_DAYS);
+		writeDistroFile(mbProbs, obProbs, "uni_dis.txt");
+		generateStats_xDistro(numCamps, ITERATIONS, "uni_dis_", mbProbs, obProbs);
+	}
+
+	public static void generateStats_normalDistro(int numCamps, int ITERATIONS) throws IOException
+	{
+		System.out.printf("Generating normal distrobutions...\n");
+		
+		double[] mbProbs = normalDistro(Constants.MIN_DAYS,Constants.MAX_DAYS);
+		double[] obProbs = normalDistro(Constants.MIN_DAYS,Constants.MAX_DAYS);
+		writeDistroFile(mbProbs, obProbs, "normal_dis.txt");
+		generateStats_xDistro(numCamps, ITERATIONS, "normal_dis_", mbProbs, obProbs);
+	}
+	
+	public static void generateStats_linDistro(int numCamps, int ITERATIONS) throws IOException
+	{
+		System.out.printf("Generating linear distrobutions...\n");
+		
+		double[] mbProbs = linearDistro(-2,2*Constants.MAX_DAYS,Constants.MIN_DAYS,Constants.MAX_DAYS);
+		double[] obProbs = linearDistro(-2,2*Constants.MAX_DAYS,Constants.MIN_DAYS,Constants.MAX_DAYS);
+		writeDistroFile(mbProbs, obProbs, "linn_dis.txt");
+		generateStats_xDistro(numCamps, ITERATIONS, "linn_dis_", mbProbs, obProbs);
+		
+		mbProbs = linearDistro(4,0,Constants.MIN_DAYS,Constants.MAX_DAYS);
+		obProbs = linearDistro(4,0,Constants.MIN_DAYS,Constants.MAX_DAYS);
+		writeDistroFile(mbProbs, obProbs, "linp_dis.txt");
+		generateStats_xDistro(numCamps, ITERATIONS, "linp_dis_", mbProbs, obProbs);
+	}
+	
+	public static void generateStats_sineDistro(int numCamps, int ITERATIONS) throws IOException
+	{
+		System.out.printf("Generating sin distrobutions...\n");
+		
+		double[] mbProbs = sinDistro(Constants.MIN_DAYS,Constants.MAX_DAYS, 16);
+		double[] obProbs = sinDistro(Constants.MIN_DAYS,Constants.MAX_DAYS, 16);
+		writeDistroFile(mbProbs, obProbs, "sin_dis.txt");
+		generateStats_xDistro(numCamps, ITERATIONS, "sin_dis_", mbProbs, obProbs);
+	}
+	
+	public static void generateStats_xDistro(int numCamps, int ITERATIONS, String filePrefix, double[] mbProbs, double[] obProbs) throws IOException
+	{
+		Stats s;
+		System.out.printf("Generating %s***.txt...\n",filePrefix);
+		
+		BufferedWriter sf = new BufferedWriter(new FileWriter(filePrefix+numCamps+"_df.txt"));
+		BufferedWriter mbf = new BufferedWriter(new FileWriter(filePrefix+numCamps+"_mbf.txt"));
+		BufferedWriter obf = new BufferedWriter(new FileWriter(filePrefix+numCamps+"_obf.txt"));
+		Stats.writeHeader(sf,mbf,obf,ITERATIONS);
+		
+		double mb_div_ob = 1;
+		
+		for(int i = 0; i < ITERATIONS; i++)
+		{
+			s = new Stats(numCamps,Constants.STD_MB_HOURS,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob);
+			runSim(s);
+			s.writeFileEntry(sf, mbf, obf);
 		}
 		
 		sf.close();
 		mbf.close();
 		obf.close();
-		
+	}
+	
+	public static void writeDistroFile(double[] mbProbs, double[] obProbs, String fileName) throws IOException
+	{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+		for(int i = 0; i < mbProbs.length; i++)
+		{
+			bw.write(mbProbs[i]+"");
+			if(i != mbProbs.length - 1)
+				bw.write(",");
+			else
+				bw.write('\n');
+		}
+		for(int i = 0; i < obProbs.length; i++)
+		{
+			bw.write(obProbs[i]+"");
+			if(i != obProbs.length - 1)
+				bw.write(",");
+			else
+				bw.write('\n');
+		}
+		bw.close();
 	}
 	
 	public static void runSim(Stats stats)
@@ -84,29 +160,10 @@ public class Main {
 		PriorityQueue<Boat> boats = new PriorityQueue<Boat>();
 		PriorityQueue<Boat> boats_bak = new PriorityQueue<Boat>();
 		
-		//double [] campsDemand = new double[stats.NUM_CAMPS];
 		boolean[] occupied = new boolean[stats.NUM_CAMPS + 1];
 		int mbcount = 0;
 		int obcount = 0;
 		for (int days = 1; days <= Constants.SIMUL_DAYS; days++) {
-			
-			// Calculate demand
-			//Arrays.fill(campsDemand, 0);
-			/*double ampScale = 1.0/stats.NUM_CAMPS;
-			for(Boat b : boats)
-			{
-				int lowerBound;
-				int upperBound;
-				int goal;
-				
-				lowerBound = b.getLocation() + 1;
-				upperBound = Math.min(stats.NUM_CAMPS - 1,b.getLocation() + b.getRange());
-				goal = b.getDestination();
-				
-				for (int i = lowerBound; i <= upperBound; i++) {
-					campsDemand[i] += ampScale*Math.exp(-0.5 * Math.pow((i - goal) / stats.DEMAND_STDDEV, 2));
-				}
-			}*/
 			
 			Arrays.fill(occupied, false);
 			while (!boats.isEmpty())
@@ -134,29 +191,120 @@ public class Main {
 			int i;
 			for (i = 0; i < stats.MB_RANGE; i++) {
 				if (occupied[i]) continue;
-				Boat b;
 				if(i < stats.OB_RANGE){
-					if (mbcount > obcount){
-						b = new OarBoat(stats);
+					if (mbcount > stats.MB_DIV_OB*obcount){
+						addOarBoat(i,stats,occupied,boats);
 						obcount++;
 					}else{
-						b = new MotorBoat(stats);
+						addMotorBoat(i,stats,occupied,boats);
 						mbcount++;
 					}
 					//b = (Constants.RANDOM.nextDouble() < stats.MB_BIAS) ? new MotorBoat(stats) : new OarBoat(stats);
 				}
 				else{
-					b = new MotorBoat(stats);
+					addMotorBoat(i,stats,occupied,boats);
 					mbcount++;
 				}
-				b.setLocation(i);
-				occupied[i] = true;
-				boats.add(b);
+				
 			}
 			
 			stats.completeDay(days,occupied);
 		}
 		
 		//System.out.println("Demand: "+ Arrays.toString(campsDemand));
+	}
+	
+	public static void addMotorBoat(int location, Stats s, boolean[] occupied, PriorityQueue<Boat> bList)
+	{
+		double[] probs = s.getProbsMotor();
+		double p = Constants.RANDOM.nextDouble() * probs[probs.length - 1];
+		Boat b = null;
+		for (int T = 0; T < probs.length; T++) {
+			if  (probs[T] > p) {
+				b = new MotorBoat(s, T);
+				break;
+			}
+		}
+		//System.out.println(Arrays.toString(probs));
+		b.setLocation(location);
+		occupied[location] = true;
+		bList.add(b);
+	}
+	
+	public static void addOarBoat(int location, Stats s, boolean[] occupied, PriorityQueue<Boat> bList)
+	{
+		double[] probs = s.getProbsOar();
+		double p = Constants.RANDOM.nextDouble() * probs[probs.length - 1];
+		Boat b = null;
+		for (int T = 0; T < probs.length; T++) {
+			if  (probs[T] > p) {
+				b = new OarBoat(s, T);
+				break;
+			}
+		}
+		b.setLocation(location);
+		occupied[location] = true;
+		bList.add(b);
+	}
+	
+	public static double[] linearDistro(double m, double c, int startX, int endX)
+	{
+		double[] dis = new double [Constants.MAX_DOCUMENTED_T];
+		double sum = 0;
+		for (int x = startX; x <= endX; x++) {
+			double val = m*x + c;
+			dis[x] = val;
+			sum += val;
+		}
+		for (int x = startX; x <= endX; x++) {
+			dis[x] /= sum;
+		}
+		return dis;
+	}
+	
+	public static double[] normalDistro(int startX, int endX)
+	{
+		double[] dis = new double [Constants.MAX_DOCUMENTED_T];
+		double stDev = (endX - startX) / 8;
+		double mean = (endX + startX)/2;
+		double a = 1.0/-2*stDev*stDev;
+		
+		double sum = 0;
+		for (int x = startX; x <= endX; x++) {
+			double val = Math.exp(a*Math.pow(x - mean, 2));
+			dis[x] = val;
+			sum += val;
+		}
+		for (int x = startX; x <= endX; x++) {
+			dis[x] /= sum;
+		}
+		return dis;
+	}
+	
+	public static double[] uniformDistro(int startX, int endX)
+	{
+		double[] dis = new double [Constants.MAX_DOCUMENTED_T];
+		double val = 1.0/(endX-startX+1);
+		for (int x = startX; x <= endX; x++) {
+			dis[x] = val;
+		}
+		return dis;
+	}
+	
+	public static double[] sinDistro(int startX, int endX, double periode)
+	{
+		double[] dis = new double [Constants.MAX_DOCUMENTED_T];
+		double w = 2*Math.PI/periode;
+		
+		double sum = 0;
+		for (int x = startX; x <= endX; x++) {
+			double val = Math.sin(w*x) + 1;
+			dis[x] = val;
+			sum += val;
+		}
+		for (int x = startX; x <= endX; x++) {
+			dis[x] /= sum;
+		}
+		return dis;
 	}
 }

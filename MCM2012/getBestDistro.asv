@@ -1,0 +1,6 @@
+function [mbDis,obDis] = getBestDistro(mbDistro,obDistro)
+s = size(mbDistro);
+    for i=1:s(1),
+        evalDistro(mbDistro(i:));
+    end
+        

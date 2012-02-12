@@ -1,0 +1,231 @@
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
+public class Main {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		int numCamps;
+		double mbHours;
+		double obHours;
+		double priorityBias;
+		double[] mbProbs, obProbs;
+		double mb_div_ob;
+		
+		numCamps = 53;
+		
+		mbHours = 12;
+		obHours = 10;
+		
+		mbProbs = new double[Constants.MAX_DOCUMENTED_T];
+		obProbs = new double[Constants.MAX_DOCUMENTED_T];
+		mb_div_ob = 1d;
+		priorityBias = 0.1;
+		
+		Stats s1;
+		
+		Stats.writeHeader(sf);
+		
+		for(int i = 0; i < 1000; i++){
+			s1 = new Stats(numCamps,mbHours,obHours,priorityBias,mbProbs,obProbs,mb_div_ob);
+			runSim(s1);
+			s1.writeFileEntry(sf, mbf, obf);
+		}
+		
+		for(int i = 2; i < 200; i++){
+			for(int ii = 0; ii < 20; ii++)
+			{
+				s1 = new Stats(i,mbHours,obHours,priorityBias,mbProbs,obProbs,mb_div_ob);
+				runSim(s1);
+				s1.writeFileEntry(sf, mbf, obf);
+			}
+			if(i % 10 == 0)
+				System.out.println(i);
+		}
+		
+	}
+	
+	public static void generateStats_IncreasedCampsCount() throws IOException
+	{
+		int ITERATIONS = 20;
+		BufferedWriter sf = new BufferedWriter(new FileWriter("inc_camp_count_df.txt"));
+		BufferedWriter mbf = new BufferedWriter(new FileWriter("inc_camp_count_mbf.txt"));
+		BufferedWriter obf = new BufferedWriter(new FileWriter("inc_camp_count_obf.txt"));
+		Stats.writeHeader(sf,mbf,obf,ITERATIONS);
+		
+		Stats s;
+		
+		
+		
+		for(int numCamps = 20; numCamps < 200; numCamps++)
+		{
+			for(int i = 0; i < ITERATIONS; i++)
+			{
+				s = new Stats(numCamps,mbHours,obHours,priorityBias,mbProbs,obProbs,mb_div_ob);
+			}
+		}
+		
+		
+		sf.close();
+		mbf.close();
+		obf.close();
+	}
+	
+	public static void generateStats_Distrobutions() throws IOException
+	{
+		BufferedWriter sf = new BufferedWriter(new FileWriter("distro_df.txt"));
+		BufferedWriter mbf = new BufferedWriter(new FileWriter("distro_mbf.txt"));
+		BufferedWriter obf = new BufferedWriter(new FileWriter("distro_obf.txt"));
+		Stats.writeHeader(sf);
+		
+		
+		
+		sf.close();
+		mbf.close();
+		obf.close();
+	}
+	
+	public static void runSim(Stats stats)
+	{
+		PriorityQueue<Boat> boats = new PriorityQueue<Boat>();
+		PriorityQueue<Boat> boats_bak = new PriorityQueue<Boat>();
+		
+		boolean[] occupied = new boolean[stats.NUM_CAMPS + 1];
+		int mbcount = 0;
+		int obcount = 0;
+		for (int days = 1; days <= Constants.SIMUL_DAYS; days++) {
+			
+			Arrays.fill(occupied, false);
+			while (!boats.isEmpty())
+			{
+				Boat top = boats.poll();
+				if( top.hasArrived() ) continue;
+				if( !top.move(occupied) ) continue;
+				boats_bak.add(top);
+				top.age();
+				if (top.getLocation() == stats.NUM_CAMPS)
+				{
+					top.arrive();
+				}
+				else
+				{
+					occupied[top.getLocation()] = true;
+				}
+			}
+			
+			PriorityQueue<Boat> tmp = boats;
+			boats = boats_bak;
+			boats_bak = tmp;
+			
+			//fill boats
+			int i;
+			for (i = 0; i < stats.MB_RANGE; i++) {
+				if (occupied[i]) continue;
+				if(i < stats.OB_RANGE){
+					if (mbcount > stats.MB_DIV_OB*obcount){
+						addOarBoat(i,stats,occupied,boats);
+						obcount++;
+					}else{
+						addMotorBoat(i,stats,occupied,boats);
+						mbcount++;
+					}
+					//b = (Constants.RANDOM.nextDouble() < stats.MB_BIAS) ? new MotorBoat(stats) : new OarBoat(stats);
+				}
+				else{
+					addMotorBoat(i,stats,occupied,boats);
+					mbcount++;
+				}
+				
+			}
+			
+			stats.completeDay(days,occupied);
+		}
+		
+		//System.out.println("Demand: "+ Arrays.toString(campsDemand));
+	}
+	
+	public static void addMotorBoat(int location, Stats s, boolean[] occupied, PriorityQueue<Boat> bList)
+	{
+		double[] probs = s.getProbsMotor();
+		double p = Constants.RANDOM.nextDouble() * probs[probs.length - 1];
+		Boat b = null;
+		for (int T = 0; T < probs.length; T++) {
+			if  (probs[T] > p) {
+				b = new MotorBoat(s, T);
+				break;
+			}
+		}
+		//System.out.println(Arrays.toString(probs));
+		b.setLocation(location);
+		occupied[location] = true;
+		bList.add(b);
+	}
+	
+	public static void addOarBoat(int location, Stats s, boolean[] occupied, PriorityQueue<Boat> bList)
+	{
+		double[] probs = s.getProbsOar();
+		double p = Constants.RANDOM.nextDouble() * probs[probs.length - 1];
+		Boat b = null;
+		for (int T = 0; T < probs.length; T++) {
+			if  (probs[T] > p) {
+				b = new OarBoat(s, T);
+				break;
+			}
+		}
+		b.setLocation(location);
+		occupied[location] = true;
+		bList.add(b);
+	}
+	
+	public static double[] linearDistro(double m, double c, int startX, int endX)
+	{
+		double[] dis = new double [Constants.MAX_DOCUMENTED_T];
+		double sum = 0;
+		for (int x = startX; x <= endX; x++) {
+			double val = m*x + c;
+			dis[x] = val;
+			sum += val;
+		}
+		for (int x = startX; x <= endX; x++) {
+			dis[x] /= sum;
+		}
+		return dis;
+	}
+	
+	public static double[] normalDistro(int startX, int endX)
+	{
+		double[] dis = new double [Constants.MAX_DOCUMENTED_T];
+		double stDev = (endX - startX) / 6;
+		double mean = (endX + startX)/2;
+		double a = 1.0/-2*stDev*stDev;
+		
+		double sum = 0;
+		for (int x = startX; x <= endX; x++) {
+			double val = Math.exp(a*Math.pow(x - mean, 2));
+			dis[x] = val;
+			sum += val;
+		}
+		for (int x = startX; x <= endX; x++) {
+			dis[x] /= sum;
+		}
+		return dis;
+	}
+	
+	public static double[] uniformDistro(int startX, int endX)
+	{
+		double[] dis = new double [Constants.MAX_DOCUMENTED_T];
+		double val = 1.0/(endX-startX+1);
+		for (int x = startX; x <= endX; x++) {
+			dis[x] = val;
+		}
+		return dis;
+	}
+	
+}

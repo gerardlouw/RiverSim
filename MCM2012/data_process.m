@@ -1,48 +1,30 @@
-mbf = dlmread('mbf.txt',',');
-obf = dlmread('obf.txt',',');
+clear;
+close all;
 
-mb = mean(mbf,1);
-ob = mean(obf,1);
+% Process increasing camp sites data
 
-total = mb + ob;
+[numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfReadAndAverage('inc_camp_count_df.txt');
 
 figure
 hold on;
-grid on;
-
-plot(mb,'r');
-plot(ob,'b');
-plot(total,'k');
-axis([4 20 0 max(total)]);
-set(gca,'XTick',4:1:20)
-
+title('Number of Trips vs Campsites');
+plot(numCamps,mbTrips,'r');
+plot(numCamps,obTrips,'b');
+plot(numCamps,totalTrips,'k');
+plot(numCamps,optimalTripsTotal,'g');
+grid();
 hold off;
 
-[numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occupationPercentage] = textread('num_camps_sf.txt','%d,%d,%d,%d,%f,%f','headerlines',1);
+figure
+title('Occ per');
+plot(numCamps, occPer);
 
-campSizes = 198;
-runs = 20;
+% Process distrobutions
 
-numCamps = median(reshape(numCamps, runs, campSizes), 1);
-numCamps
-mbTrips = median(reshape(mbTrips, runs, campSizes), 1);
-obTrips = median(reshape(obTrips, runs, campSizes), 1);
-totalTrips = median(reshape(totalTrips, runs, campSizes), 1);
-optimalTripsTotal = median(reshape(optimalTripsTotal, runs, campSizes), 1);
-occupationPercentage = median(reshape(occupationPercentage, runs, campSizes), 1);
-
-for i=1:200
-    %nummmCamps(i) = median(numCamps(i*10-9:i*10));
-    %mbTripsss(i) = median(mbTripsss(i*10-9:i*10));
-    %mbTripsss(i) = median(mbTripsss(i*10-9:i*10));
-    %
+for i=45:45:225,
+    plotBestDistro('linp_dis', i, ['Positive Linear ( Y = ' int2str(i) ' )']);
+    plotBestDistro('linn_dis', i, ['Negative Linear ( Y = ' int2str(i) ' )']);
+    plotBestDistro('normal_dis', i, ['Gaussian ( Y = ' int2str(i) ' )']);
+    plotBestDistro('uni_dis', i, ['Uniform ( Y = ' int2str(i) ' )']);
+    plotBestDistro('sin_dis', i, ['Sinusoidal ( Y = ' int2str(i) ' )']);
 end
-
-figure;
-hold on;
-plot(numCamps, totalTrips, 'r', numCamps, optimalTripsTotal, 'b');
-plot(numCamps,mbTrips,'g',numCamps,obTrips,'k');
-hold off;
-
-figure;
-plot(numCamps,occupationPercentage);

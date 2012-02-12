@@ -9,6 +9,11 @@ public class Constants {
 	//public static final double DELTA = RIVER_LENGTH / (NUM_CAMPS + 1);
 	public static final int MIN_DAYS = 6;
 	public static final int MAX_DAYS = 18;
+	public static final int MAX_DAYS_BOUNDS_DEVIATION = 10;
+	public static final int MAX_DOCUMENTED_T = MAX_DAYS + MAX_DAYS_BOUNDS_DEVIATION;
+	public static final int STD_MB_HOURS = 12;
+	public static final int STD_OB_HOURS = 8;
+	public static final double STD_PRIORITY_BIAS = 0.1;
 	
 	public static final Random RANDOM = new Random();
 }

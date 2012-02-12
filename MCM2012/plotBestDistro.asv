@@ -1,0 +1,25 @@
+function plotBestDistro(filePrefix, numCamps, title_)
+    [mbDis,obDis,gmbDis,gobDis,index] = readAndLoadBestDistro([filePrefix '_' int2str(numCamps)],[filePrefix '.txt']);
+    [numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfRead();
+    totalDis = mbDis + obDis;
+    gtotalDis = gmbDis + gobDis;
+    
+    figure
+    hold on;
+    title(title_);
+    s = size(mbDis);
+    x = 0:(s(2)-1);
+    plot(x,mbDis,'r');
+    plot(x,obDis,'b');
+    plot(x,totalDis,'k');
+    plot(x,gtotalDis*max(totalDis)/max(gtotalDis),'kp--');
+
+    legend('Motorboat','Oarboat','Total','Goal distribution','Location','Best');
+    xlabel('Trip duration (days)');
+    ylabel('Number of successful trips');
+
+    axis([4 20 0 1.1*max(totalDis)]);
+    set(gca,'XTick',4:1:20);
+    grid();
+    print ([filePrefix '_' int2str(numCamps)], '-dpdf');
+    hold off;

@@ -1,0 +1,181 @@
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
+public class Main {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		int numCamps;
+		double mbHours, mbGoalAvg, mbGoalVar;
+		double obHours, obGoalAvg, obGoalVar;
+		double priorityBias, mbBias;
+		double[] mbProbs, obProbs;
+		
+		numCamps = 50;
+		/*mbHours = 12;
+		mbGoalAvg = 9;
+		mbGoalVar = 3.5;
+		mbBias = 0.5;
+		
+		obHours = 8;
+		obGoalAvg = 16;
+		obGoalVar = 3;*/
+		
+		mbHours = 12;
+		mbGoalAvg = 9;
+		mbGoalVar = 3.5;
+		mbBias = 0.5;
+		
+		obHours = 12;
+		obGoalAvg = 16;
+		obGoalVar = 3;
+		
+		mbProbs = new double[Constants.MAX_DAYS + 10];
+		obProbs = new double[Constants.MAX_DAYS + 10];
+		
+		for (int i = 6; i <= 18; i++) {
+			mbProbs[i] = 1;
+			obProbs[i] = 1;
+		}
+		
+		priorityBias = 0.1;
+		
+		Stats s1;
+		
+		BufferedWriter sf = new BufferedWriter(new FileWriter("sf.txt"));
+		BufferedWriter mbf = new BufferedWriter(new FileWriter("mbf.txt"));
+		BufferedWriter obf = new BufferedWriter(new FileWriter("obf.txt"));
+		
+		Stats.writeHeader(sf);
+		
+		for(int i = 0; i < 1000; i++){
+			s1 = new Stats(numCamps,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias,mbProbs,obProbs);
+			runSim(s1);
+			s1.writeFileEntry(sf, mbf, obf);
+		}
+		
+		sf.close();
+		mbf.close();
+		obf.close();
+		
+		sf = new BufferedWriter(new FileWriter("num_camps_sf.txt"));
+		mbf = new BufferedWriter(new FileWriter("num_camps_mbf.txt"));
+		obf = new BufferedWriter(new FileWriter("num_camps_obf.txt"));
+		
+		Stats.writeHeader(sf);
+		
+		for(int i = 2; i < 200; i++){
+			for(int ii = 0; ii < 20; ii++)
+			{
+				s1 = new Stats(i,mbHours,mbGoalAvg,mbGoalVar,obHours,obGoalAvg,obGoalVar,priorityBias,mbProbs,obProbs);
+				runSim(s1);
+				s1.writeFileEntry(sf, mbf, obf);
+			}
+			if(i % 10 == 0)
+				System.out.println(i);
+		}
+		
+		sf.close();
+		mbf.close();
+		obf.close();
+		
+	}
+	
+	public static void runSim(Stats stats)
+	{
+		PriorityQueue<Boat> boats = new PriorityQueue<Boat>();
+		PriorityQueue<Boat> boats_bak = new PriorityQueue<Boat>();
+		
+		boolean[] occupied = new boolean[stats.NUM_CAMPS + 1];
+		int mbcount = 0;
+		int obcount = 0;
+		for (int days = 1; days <= Constants.SIMUL_DAYS; days++) {
+			
+			Arrays.fill(occupied, false);
+			while (!boats.isEmpty())
+			{
+				Boat top = boats.poll();
+				if( top.hasArrived() ) continue;
+				if( !top.move(occupied) ) continue;
+				boats_bak.add(top);
+				top.age();
+				if (top.getLocation() == stats.NUM_CAMPS)
+				{
+					top.arrive();
+				}
+				else
+				{
+					occupied[top.getLocation()] = true;
+				}
+			}
+			
+			PriorityQueue<Boat> tmp = boats;
+			boats = boats_bak;
+			boats_bak = tmp;
+			
+			//fill boats
+			int i;
+			for (i = 0; i < stats.MB_RANGE; i++) {
+				if (occupied[i]) continue;
+				if(i < stats.OB_RANGE){
+					if (mbcount > obcount){
+						addOarBoat(i,stats,occupied,boats);
+						obcount++;
+					}else{
+						addMotorBoat(i,stats,occupied,boats);
+						mbcount++;
+					}
+					//b = (Constants.RANDOM.nextDouble() < stats.MB_BIAS) ? new MotorBoat(stats) : new OarBoat(stats);
+				}
+				else{
+					addMotorBoat(i,stats,occupied,boats);
+					mbcount++;
+				}
+				
+			}
+			
+			stats.completeDay(days,occupied);
+		}
+		
+		//System.out.println("Demand: "+ Arrays.toString(campsDemand));
+	}
+	
+	public static void addMotorBoat(int location, Stats s, boolean[] occupied, PriorityQueue<Boat> bList)
+	{
+		double[] probs = s.getProbsMotor();
+		double p = Constants.RANDOM.nextDouble() * probs[probs.length - 1];
+		Boat b = null;
+		for (int T = 0; T < probs.length; T++) {
+			if  (probs[T] > p) {
+				b = new MotorBoat(s, T);
+				break;
+			}
+		}
+		b.setLocation(location);
+		occupied[location] = true;
+		bList.add(b);
+	}
+	
+	public static void addOarBoat(int location, Stats s, boolean[] occupied, PriorityQueue<Boat> bList)
+	{
+		double[] probs = s.getProbsMotor();
+		double p = Constants.RANDOM.nextDouble() * probs[probs.length - 1];
+		Boat b = null;
+		for (int T = 0; T < probs.length; T++) {
+			if  (probs[T] > p) {
+				b = new OarBoat(s, T);
+				break;
+			}
+		}
+		b.setLocation(location);
+		occupied[location] = true;
+		bList.add(b);
+	}
+}

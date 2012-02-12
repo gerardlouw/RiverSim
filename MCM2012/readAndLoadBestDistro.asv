@@ -1,0 +1,6 @@
+function [mbDis,obDis,gmbDis,gobDis] = readAndLoadBestDistro(filePrefix,gdisFile)
+    gDis = dlmread(gdisFile,',');
+    gmbDis = gDis(1,1:end);
+    gobDis = gDis(2,1:end);
+    [mbDis,obDis] = readDistro(filePrefix);
+    

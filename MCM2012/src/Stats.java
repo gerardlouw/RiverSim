@@ -9,53 +9,66 @@ public class Stats {
 	public final double DELTA;
 	
 	public final double MB_HOURS;
-	public final double MB_GOAL_AVG;
-	public final double MB_GOAL_VAR;
 	public final double MB_RANGE;
 	
 	public final double OB_HOURS;
-	public final double OB_GOAL_AVG;
-	public final double OB_GOAL_VAR;
 	public final double OB_RANGE;
 	
 	public final double PRIORITY_BIAS;
 	
 	private int[] tripsTotalsOarBoat;
 	private int[] tripsTotalsMotorBoat;
+	private int totalOarBoatTrips;
+	private int totalMotorBoatTrips;
 	private double[] campsPopulated;
 	private int deadlocks;
 	private int[] lateBoats;
 	private int[] earlyBoats;
 	private double campsPopulatedAverage;
 	
+	public double[] MB_X;
+	public double[] OB_X;
+	public double MB_DIV_OB;
+	
 	public Stats( int numCamps,
-				  double mbHours, double mbGoalAvg, double mbGoalVar,
-				  double obHours, double obGoalAvg, double obGoalVar,
-				  double priorityBias)
+				  double mbHours,
+				  double obHours,
+				  double priorityBias,
+				  double[] MB_X, double[] OB_X,
+				  double MB_DIV_OB)
 	{
 		NUM_CAMPS = numCamps;
 		DELTA = Constants.RIVER_LENGTH / (NUM_CAMPS + 1);
 		
 		MB_HOURS = mbHours;
-		MB_GOAL_AVG = mbGoalAvg;
-		MB_GOAL_VAR = mbGoalVar;
-		
 		OB_HOURS = obHours;
-		OB_GOAL_AVG = obGoalAvg;
-		OB_GOAL_VAR = obGoalVar;
 		
 		MB_RANGE = (int)(MB_HOURS * MotorBoat.SPEED / DELTA);
 		OB_RANGE = (int)(OB_HOURS * OarBoat.SPEED / DELTA);
 		
 		PRIORITY_BIAS = priorityBias;
 	
-		tripsTotalsOarBoat = new int [Constants.MAX_DAYS + 10];
-		tripsTotalsMotorBoat = new int [Constants.MAX_DAYS + 10];
+		tripsTotalsOarBoat = new int [Constants.MAX_DOCUMENTED_T];
+		tripsTotalsMotorBoat = new int [Constants.MAX_DOCUMENTED_T];
+		totalOarBoatTrips = 0;
+		totalMotorBoatTrips = 0;
+		
 		campsPopulated = new double [Constants.SIMUL_DAYS];
 		deadlocks = 0;
 		lateBoats = new int [3];
 		earlyBoats = new int [3];
 		campsPopulatedAverage = 0;
+		
+		this.MB_X = new double [MB_X.length];
+		this.OB_X = new double [OB_X.length];
+		this.MB_DIV_OB = MB_DIV_OB;
+		
+		for (int T = 1; T < OB_X.length; T++) {
+			this.OB_X[T] = OB_X[T] + this.OB_X[T - 1];
+		}
+		for (int T = 1; T < MB_X.length; T++) {
+			this.MB_X[T] = MB_X[T] + this.MB_X[T - 1];
+		}
 	}
 	
 	public void completedTrip(Boat b)
@@ -108,22 +121,12 @@ public class Stats {
 	
 	public int getTotalTripsOarBoat()
 	{
-		int sum = 0;
-		for(int i = 0; i < tripsTotalsOarBoat.length; i++)
-		{
-			sum+=tripsTotalsOarBoat[i];
-		}
-		return sum;
+		return totalOarBoatTrips;
 	}
 	
 	public int getTotalTripsMotorBoat()
 	{
-		int sum = 0;
-		for(int i = 0; i < tripsTotalsMotorBoat.length; i++)
-		{
-			sum+=tripsTotalsMotorBoat[i];
-		}
-		return sum;
+		return totalMotorBoatTrips;
 	}
 	
 	public int[] getTripsTotalsOarBoat() {
@@ -161,11 +164,13 @@ public class Stats {
 	private void incrementOarTripsTotal(int tripDuration)
 	{
 		tripsTotalsOarBoat[tripDuration]++;
+		totalOarBoatTrips++;
 	}
 	
 	private void incrementMotorTripsTotal(int tripDuration)
 	{
 		tripsTotalsMotorBoat[tripDuration]++;
+		totalMotorBoatTrips++;
 	}
 	
 	private void countPopulation(int day, boolean[] occupied)
@@ -196,6 +201,16 @@ public class Stats {
 		}
 		average /= sum;
 		return Constants.SIMUL_DAYS*NUM_CAMPS/average;
+	}
+	
+	public double [] getProbsOar()
+	{
+		return OB_X;
+	}
+	
+	public double [] getProbsMotor()
+	{
+		return MB_X;
 	}
 	
 	@Override
@@ -246,10 +261,27 @@ public class Stats {
 		return sb.toString();
 	}
 	
-	public static void writeHeader(BufferedWriter sf)
+	public static void writeHeader(BufferedWriter sf, BufferedWriter mbf, BufferedWriter obf, int itterations)
 	{
 		try {
 			sf.write("NUM_CAMPS,MB_TRIPS,OB_TRIPS,TOTAL_TRIPS,OPTIMAL_TRIPS_TOTAL,CAMP_POPULATION_PERCENTAGE\n");
+			sf.write(String.format("%d,%d,%d,%d,%f,%f\n",itterations,itterations, itterations,itterations, (float)itterations,(float)itterations));
+			for(int i = 0; i < Constants.MAX_DOCUMENTED_T; i++)
+			{
+				mbf.write(itterations+"");
+				if(i != Constants.MAX_DOCUMENTED_T - 1)
+					mbf.write(",");
+				else
+					mbf.write('\n');
+			}
+			for(int i = 0; i < Constants.MAX_DOCUMENTED_T; i++)
+			{
+				obf.write(itterations+"");
+				if(i != Constants.MAX_DOCUMENTED_T - 1)
+					obf.write(",");
+				else
+					obf.write('\n');
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -281,5 +313,6 @@ public class Stats {
 			e.printStackTrace();
 		}
 	}
+
 	
 }

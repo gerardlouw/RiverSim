@@ -1,34 +1,29 @@
-mbf = dlmread('mbf.txt',',');
-obf = dlmread('obf.txt',',');
+clear;
+close all;
 
-mb = mean(mbf,1);
-ob = mean(obf,1);
+% Process increasing camp sites data
 
-total = mb + ob;
+[numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfReadAndAverage('inc_camp_count_df.txt');
 
+figure
 hold on;
-grid on;
-
-plot(mb,'r');
-plot(ob,'b');
-plot(total,'k');
-axis([4 20 0 max(total)]);
-set(gca,'XTick',4:1:20)
-
+title('Number of Trips vs Campsites');
+plot(numCamps,mbTrips,'r');
+plot(numCamps,obTrips,'b');
+plot(numCamps,totalTrips,'k');
+plot(numCamps,optimalTripsTotal,'g');
 hold off;
 
-[numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occupationPercentage] = textread('num_camps_sf.txt','%d,%d,%d,%d,%f,%f','headerlines',1);
+figure
+title('Occ per');
+plot(numCamps, occPer);
 
+% Process distrobutions
 
-for i=1:200
-    numCamps(i*10-9:i*10)
-end
-
-figure;
-hold on;
-plot(numCamps, totalTrips, 'r', numCamps, optimalTripsTotal, 'b');
-plot(numCamps,mbTrips,'g',numCamps,obTrips,'k');
-hold off;
-
-figure;
-plot(numCamps,occupationPercentage);
+% linearDistro
+for i:25
+plotBestDistro('linp_dis', 135, 'Linear Positive');
+plotBestDistro('linn_dis', 135, 'Linear Negative');
+plotBestDistro('normal_dis', 135, 'Normal');
+plotBestDistro('uni_dis', 135, 'Uniform');
+plotBestDistro('sin_dis', 135, 'Sine');

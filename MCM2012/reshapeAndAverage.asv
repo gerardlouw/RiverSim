@@ -1,0 +1,2 @@
+function result = reshapeAndAverage(array, iterations)
+    numCamps = median(reshape(numCamps, iterations, campSizes), 1);
