@@ -18,7 +18,7 @@ plotIncCamp('rand_inf',f21,f22);
 
 figure(f11);
 hold all;
-legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random', 'Location', 'Best');
 ylabel('Trips','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
@@ -28,7 +28,7 @@ print ('inc_camp_count_sum', '-dpng');
 
 figure(f12);
 hold all;
-legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random', 'Location', 'Best');
 ylabel('Campsite occupation percentage ( % )','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
@@ -39,7 +39,7 @@ print ('inc_camp_count_occu_sum', '-dpng');
 
 figure(f21);
 hold all;
-legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random', 'Location', 'Best');
 ylabel('Trips','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
@@ -49,7 +49,7 @@ print ('inc_camp_count_sum_inf', '-dpng');
 
 figure(f22);
 hold all;
-legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random', 'Location', 'Best');
 ylabel('Campsite occupation percentage ( % )','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
