@@ -29,13 +29,20 @@ public class Stats {
 	public double[] MB_X;
 	public double[] OB_X;
 	public double MB_DIV_OB;
+	public final int PRIORITY_FUNC;
+	
+	public static final int RANDOM = 0;
+	public static final int WEIGHTED_AGE = 1;
+	public static final int AGE = 2;
+	public static final int MOVABILITY = 3;
 	
 	public Stats( int numCamps,
 				  double mbHours,
 				  double obHours,
 				  double priorityBias,
 				  double[] MB_X, double[] OB_X,
-				  double MB_DIV_OB)
+				  double MB_DIV_OB,
+				  int priorityFunc)
 	{
 		NUM_CAMPS = numCamps;
 		DELTA = Constants.RIVER_LENGTH / (NUM_CAMPS + 1);
@@ -69,6 +76,7 @@ public class Stats {
 		for (int T = 1; T < MB_X.length; T++) {
 			this.MB_X[T] = MB_X[T] + this.MB_X[T - 1];
 		}
+		PRIORITY_FUNC = priorityFunc;
 	}
 	
 	public void completedTrip(Boat b)

@@ -8,14 +8,53 @@ function plotHoursDistros(filePrefix, campCount, title_, mb)
     obDis = reshapeAndAverageDis(obDis,iterations);
     
     s = size(mbDis);
+    f1 = figure();
+    f2 = figure();
+    
     for i = 1:s(1),
         if mb,
-            title__ = [title_ '( ' int2str(mbHours(i)) 'h )'];
-            fileName = [xFilePrefix '_mb' int2str(mbHours(i))];
+            h = mbHours(i);
+            title__ = [title_ '( ' int2str(h) 'h )'];
+            fileName = [xFilePrefix '_mb' int2str(h)];
+            if(h >= 4 && mod(h,2) == 0 &&  h<= 14),
+                plotDistro(mbDis(i,1:end), obDis(i,1:end), gmbDis, gobDis, fileName, title__, occPer(i),f1,h);
+            else
+                plotDistro(mbDis(i,1:end), obDis(i,1:end), gmbDis, gobDis, fileName, title__, occPer(i));
+            end;
         else
-            title__ = [title_ '( ' int2str(obHours(i)) 'h )'];
-            fileName = [xFilePrefix '_ob' int2str(obHours(i))];
+            h = obHours(i);
+            title__ = [title_ '( ' int2str(h) 'h )'];
+            fileName = [xFilePrefix '_ob' int2str(h)];
+            
+            if(h >= 4 && mod(h,2) == 0 &&  h<= 14),
+                plotDistro(mbDis(i,1:end), obDis(i,1:end), gmbDis, gobDis, fileName, title__, occPer(i),f2,h);
+            else
+                plotDistro(mbDis(i,1:end), obDis(i,1:end), gmbDis, gobDis, fileName, title__, occPer(i));
+            end;
         end;
-        plotDistro(mbDis(i,1:end), obDis(i,1:end), gmbDis, gobDis, fileName, title__, occPer(i));
+        
+    end;
+    if(mb),
+    figure(f1);
+    hold on;
+    hold all;
+    xlim([4 20]);
+    xlabel('Trip duration (days)','FontSize',14);
+    ylabel('Number of successful trips','FontSize',14);
+    legend('show');
+    grid();
+    print ([xFilePrefix '_mb_sum'], '-dpdf');
+    print ([xFilePrefix '_mb_sum'], '-dpng');
+    else
+    figure(f2);
+    hold on;
+    hold all;
+    xlim([4 20]);
+    xlabel('Trip duration (days)','FontSize',14);
+    ylabel('Number of successful trips','FontSize',14);
+    legend('show');
+    grid();
+    print ([xFilePrefix '_ob_sum'], '-dpdf');
+    print ([xFilePrefix '_ob_sum'], '-dpng');
     end;
     

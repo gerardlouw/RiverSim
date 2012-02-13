@@ -12,7 +12,11 @@ public class Main {
 	 */
 	public static void main(String[] args) throws IOException {
 		
-		generateStats_IncreasingCampsCount();
+		generateStats_IncreasingCampsCount(Stats.AGE,"age");
+		generateStats_IncreasingCampsCount(Stats.WEIGHTED_AGE,"wage");
+		generateStats_IncreasingCampsCount(Stats.MOVABILITY,"mov");
+		generateStats_IncreasingCampsCount(Stats.RANDOM,"rand");
+		
 		for(int numCamps = 225; numCamps > 0; numCamps -= 225/5)
 		{
 			generateStats_Distrobutions(numCamps);
@@ -21,13 +25,13 @@ public class Main {
 		
 	}
 	
-	public static void generateStats_IncreasingCampsCount() throws IOException
+	public static void generateStats_IncreasingCampsCount(int pFunc, String afn) throws IOException
 	{
 		int ITERATIONS = 10;
-		System.out.println("Generating in increasing camps count stats...");
-		BufferedWriter sf = new BufferedWriter(new FileWriter("inc_camp_count_df.txt"));
-		BufferedWriter mbf = new BufferedWriter(new FileWriter("inc_camp_count_mbf.txt"));
-		BufferedWriter obf = new BufferedWriter(new FileWriter("inc_camp_count_obf.txt"));
+		System.out.printf("Generating inc. camps count stats (prio_func=%s)...\n",afn);
+		BufferedWriter sf = new BufferedWriter(new FileWriter("inc_camp_count_"+afn+"_df.txt"));
+		BufferedWriter mbf = new BufferedWriter(new FileWriter("inc_camp_count_"+afn+"_mbf.txt"));
+		BufferedWriter obf = new BufferedWriter(new FileWriter("inc_camp_count_"+afn+"_obf.txt"));
 		Stats.writeHeader(sf,mbf,obf,ITERATIONS);
 		
 		Stats s;
@@ -40,7 +44,7 @@ public class Main {
 		{
 			for(int i = 0; i < ITERATIONS; i++)
 			{
-				s = new Stats(numCamps,Constants.STD_MB_HOURS,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob);
+				s = new Stats(numCamps,Constants.STD_MB_HOURS,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob,pFunc);
 				runSim(s);
 				s.writeFileEntry(sf, mbf, obf);
 			}
@@ -124,7 +128,7 @@ public class Main {
 		
 		for(int i = 0; i < ITERATIONS; i++)
 		{
-			s = new Stats(numCamps,Constants.STD_MB_HOURS,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob);
+			s = new Stats(numCamps,Constants.STD_MB_HOURS,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob,Constants.DEFAULT_PRIORITY_FUNC);
 			runSim(s);
 			s.writeFileEntry(sf, mbf, obf);
 		}
@@ -159,11 +163,11 @@ public class Main {
 			System.out.print(hours+" ");
 			for(int i = 0; i < ITERATIONS; i++)
 			{
-				s = new Stats(numCamps,hours,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,Double.POSITIVE_INFINITY);
+				s = new Stats(numCamps,hours,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,1/*Double.POSITIVE_INFINITY*/,Constants.DEFAULT_PRIORITY_FUNC);
 				runSim(s);
 				s.writeFileEntry(mb_sf, mb_mbf, mb_obf);
 				
-				s = new Stats(numCamps,Constants.STD_MB_HOURS,hours,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,0);
+				s = new Stats(numCamps,Constants.STD_MB_HOURS,hours,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,1/*0*/,Constants.DEFAULT_PRIORITY_FUNC);
 				runSim(s);
 				s.writeFileEntry(ob_sf, ob_mbf, ob_obf);
 			}

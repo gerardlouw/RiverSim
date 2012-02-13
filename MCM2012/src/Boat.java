@@ -138,12 +138,19 @@ public abstract class Boat implements Comparable<Boat> {
 	}
 	
 	public double getPriority() {
-		//return 1;
-		//return -(this instanceof MotorBoat ? s.MB_X : s.OB_X)[tripDays]; 
-		return age /(double)tripDays;
-		//return Math.random();
-		//return s.PRIORITY_BIAS / (daysLeft * range - distLeft) + (double)tripDays / Math.max(daysLeft, 1);
-		//return location - (double)s.NUM_CAMPS / tripDays * getAge();
+		switch(s.PRIORITY_FUNC)
+		{
+		case Stats.RANDOM:
+			return Math.random();
+		case Stats.AGE:
+			return age;
+		case Stats.WEIGHTED_AGE:
+			return age /(double)tripDays;
+		case Stats.MOVABILITY:
+			return s.PRIORITY_BIAS / (daysLeft * range - distLeft) + (double)tripDays / Math.max(daysLeft, 1);
+		default:
+			return 1;
+		}
 	}
 	
 	private boolean runningLate() {
