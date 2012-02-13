@@ -2,45 +2,50 @@ clear;
 close all;
 
 % Process increasing camp sites data
+f = figure();
+f = figure();
+plotIncCamp('age',f);
+plotIncCamp('wage',f);
+plotIncCamp('mov',f);
+plotIncCamp('rand',f);
 
-[numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfReadAndAverage('inc_camp_count_df.txt');
+f2 = figure();
+plotIncCamp('age_inf',f2,'Inf','Inf');
+plotIncCamp('wage_inf',f2,'Inf','Inf');
+plotIncCamp('mov_inf',f2,'Inf','Inf');
+plotIncCamp('rand_inf',f2,'Inf','Inf');
 
-figure
-hold on;
-plot(numCamps,mbTrips,'r');
-plot(numCamps,obTrips,'b');
-plot(numCamps,totalTrips,'k');
-plot(numCamps,optimalTripsTotal,'k--');
-legend('Motorboat trips', 'Oarboat trips', 'Total trips', 'Theoretical throughput','Location','Best');
+figure(f);
+hold all;
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
 ylabel('Trips','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
 grid();
 print ('inc_camp_count', '-dpdf');
 print ('inc_camp_count', '-dpng');
-hold off;
 
-figure
-plot(numCamps, occPer*100);
-ylabel('Campsite occupation percentage ( % )','FontSize',14);
+figure(f2);
+hold all;
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+ylabel('Trips','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
 grid();
-print ('inc_camp_count_occu', '-dpdf');
-print ('inc_camp_count_occu', '-dpng');
-
+print ('inc_camp_count_inf', '-dpdf');
+print ('inc_camp_count_inf', '-dpng');
 
 % Process distrobutions
 
 for i=45:45:225,
-    plotBestDistro('linp_dis', i, ['Positive Linear ( Y = ' int2str(i) ' )']);
-    plotBestDistro('linn_dis', i, ['Negative Linear ( Y = ' int2str(i) ' )']);
-    plotBestDistro('normal_dis', i, ['Gaussian ( Y = ' int2str(i) ' )']);
-    plotBestDistro('uni_dis', i, ['Uniform ( Y = ' int2str(i) ' )']);
-    plotBestDistro('sin_dis', i, ['Sinusoidal ( Y = ' int2str(i) ' )']);
+    plotBestDistro('linp_dis', i, ['Positive Linear (Y = ' int2str(i)]);
+    plotBestDistro('linn_dis', i, ['Negative Linear (Y = ' int2str(i)]);
+    plotBestDistro('normal_dis', i, ['Gaussian (Y = ' int2str(i)]);
+    plotBestDistro('uni_dis', i, ['Uniform (Y = ' int2str(i)]);
+    plotBestDistro('sin_dis', i, ['Sinusoidal (Y = ' int2str(i)]);
 end
 
 for i=45:45:225,
-    plotHoursDistros('sens_analyis_mb_hours', i, 'Motorboat distrobution');
-    plotHoursDistros('sens_analyis_ob_hours', i, 'Negative Linear');
+    plotHoursDistros('sens_analyis_mb_hours', i, 'Motorboat distribution',1);
+    plotHoursDistros('sens_analyis_ob_hours', i, 'Oarboat distribution',0);
 end

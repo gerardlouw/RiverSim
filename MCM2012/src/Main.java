@@ -17,6 +17,11 @@ public class Main {
 		generateStats_IncreasingCampsCount(Stats.MOVABILITY,"mov");
 		generateStats_IncreasingCampsCount(Stats.RANDOM,"rand");
 		
+		generateStats_IncreasingCampsCountInf(Stats.AGE,"age");
+		generateStats_IncreasingCampsCountInf(Stats.WEIGHTED_AGE,"wage");
+		generateStats_IncreasingCampsCountInf(Stats.MOVABILITY,"mov");
+		generateStats_IncreasingCampsCountInf(Stats.RANDOM,"rand");
+		
 		for(int numCamps = 225; numCamps > 0; numCamps -= 225/5)
 		{
 			generateStats_Distrobutions(numCamps);
@@ -45,6 +50,40 @@ public class Main {
 			for(int i = 0; i < ITERATIONS; i++)
 			{
 				s = new Stats(numCamps,Constants.STD_MB_HOURS,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob,pFunc);
+				runSim(s);
+				s.writeFileEntry(sf, mbf, obf);
+			}
+			System.out.printf("%d ",numCamps);
+			if((numCamps+1) % 30 == 0)
+				System.out.println();
+		}
+		System.out.println();
+		
+		sf.close();
+		mbf.close();
+		obf.close();
+	}
+	
+	public static void generateStats_IncreasingCampsCountInf(int pFunc, String afn) throws IOException
+	{
+		int ITERATIONS = 10;
+		System.out.printf("Generating inc. camps count stats (prio_func=%s, infinite range)...\n",afn);
+		BufferedWriter sf = new BufferedWriter(new FileWriter("inc_camp_count_"+afn+"_inf_df.txt"));
+		BufferedWriter mbf = new BufferedWriter(new FileWriter("inc_camp_count_"+afn+"_inf_mbf.txt"));
+		BufferedWriter obf = new BufferedWriter(new FileWriter("inc_camp_count_"+afn+"_inf_obf.txt"));
+		Stats.writeHeader(sf,mbf,obf,ITERATIONS);
+		
+		Stats s;
+		double[] mbProbs = uniformDistro(Constants.MIN_DAYS,(Constants.MAX_DAYS+Constants.MIN_DAYS)/2);
+		double[] obProbs = uniformDistro((Constants.MAX_DAYS+Constants.MIN_DAYS)/2,Constants.MAX_DAYS);
+		double mb_div_ob = 1;
+		
+		System.out.print("Number of camps: ");
+		for(int numCamps = 20; numCamps < 200; numCamps++)
+		{
+			for(int i = 0; i < ITERATIONS; i++)
+			{
+				s = new Stats(numCamps,(Constants.RIVER_LENGTH/MotorBoat.SPEED) + 1,(Constants.RIVER_LENGTH/OarBoat.SPEED) + 1,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,mb_div_ob,pFunc);
 				runSim(s);
 				s.writeFileEntry(sf, mbf, obf);
 			}
@@ -219,8 +258,10 @@ public class Main {
 			while (!boats.isEmpty())
 			{
 				Boat top = boats.poll();
-				if( top.hasArrived() ) continue;
-				if( !top.move(occupied) ) continue;
+				if( top.hasArrived() )
+					continue;
+				if( !top.move(occupied) )
+					continue;
 				boats_bak.add(top);
 				top.age();
 				if (top.getLocation() == stats.NUM_CAMPS)
@@ -239,7 +280,7 @@ public class Main {
 			
 			//fill boats
 			int i;
-			for (i = 0; i < stats.MB_RANGE; i++) {
+			for (i = 0; i < Math.min(stats.MB_RANGE, stats.NUM_CAMPS+1); i++) {
 				if (occupied[i]) continue;
 				if(Double.isInfinite(stats.MB_DIV_OB))
 				{

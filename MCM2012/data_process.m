@@ -2,20 +2,60 @@ clear;
 close all;
 
 % Process increasing camp sites data
-f = figure();
-plotIncCamp('age',f);
-plotIncCamp('wage',f);
-plotIncCamp('mov',f);
-plotIncCamp('rand',f);
-figure(f);
+f11 = figure();
+f12 = figure();
+plotIncCamp('age',f11,f12);
+plotIncCamp('wage',f11,f12);
+plotIncCamp('mov',f11,f12);
+plotIncCamp('rand',f11,f12);
+
+f21 = figure();
+f22 = figure();
+plotIncCamp('age_inf',f21,f22,'Inf','Inf');
+plotIncCamp('wage_inf',f21,f22,'Inf','Inf');
+plotIncCamp('mov_inf',f21,f22,'Inf','Inf');
+plotIncCamp('rand_inf',f21,f22,'Inf','Inf');
+
+figure(f11);
 hold all;
-legend('Age', '{\Pi}_1', '{\Pi}_2', 'Random');
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
 ylabel('Trips','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
 grid();
-print ('inc_camp_count', '-dpdf');
-print ('inc_camp_count', '-dpng');
+print ('inc_camp_count_sum', '-dpdf');
+print ('inc_camp_count_sum', '-dpng');
+
+figure(f12);
+hold all;
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+ylabel('Campsite occupation percentage ( % )','FontSize',14);
+xlabel('Number of campsites ( Y )','FontSize',14);
+set(gca,'FontSize',14);
+grid();
+print ('inc_camp_count_occu_sum', '-dpdf');
+print ('inc_camp_count_occu_sum', '-dpng');
+
+
+figure(f21);
+hold all;
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+ylabel('Trips','FontSize',14);
+xlabel('Number of campsites ( Y )','FontSize',14);
+set(gca,'FontSize',14);
+grid();
+print ('inc_camp_count_sum', '-dpdf');
+print ('inc_camp_count_sum', '-dpng');
+
+figure(f22);
+hold all;
+legend('T_a', '{\Phi}_1', '{\Phi}_2', 'Random');
+ylabel('Campsite occupation percentage ( % )','FontSize',14);
+xlabel('Number of campsites ( Y )','FontSize',14);
+set(gca,'FontSize',14);
+grid();
+print ('inc_camp_count_occu_sum', '-dpdf');
+print ('inc_camp_count_occu_sum', '-dpng');
 
 % Process distrobutions
 

@@ -1,28 +1,37 @@
-function plotIncCamp()
-    [numCamps,mbHours,obHours,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfReadAndMedian('inc_camp_count_df.txt');
+function plotIncCamp(afn, f, title_)
+    [numCamps,mbHours,obHours,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfReadAndMedian(['inc_camp_count_' afn '_df.txt']);
 
     figure
-    hold on;
-    plot(numCamps,mbTrips,'r');
-    plot(numCamps,obTrips,'b');
-    plot(numCamps,totalTrips,'k');
+    hold all;
+    plot(numCamps,mbTrips);
+    hold all;
+    plot(numCamps,obTrips);
+    hold all;
+    plot(numCamps,totalTrips);
+    hold all;
     plot(numCamps,optimalTripsTotal,'k--');
+    hold all;
+    title(tit);
     legend('Motorboat trips', 'Oarboat trips', 'Total trips', 'Theoretical throughput','Location','Best');
     ylabel('Trips','FontSize',14);
     xlabel('Number of campsites ( Y )','FontSize',14);
     set(gca,'FontSize',14);
     grid();
-    print ('inc_camp_count', '-dpdf');
-    print ('inc_camp_count', '-dpng');
+    print (['inc_camp_count_' afn], '-dpdf');
+    print (['inc_camp_count_' afn], '-dpng');
     close;
-    hold off;
+    
+    figure(f)
+    hold all;
+    plot(numCamps,totalTrips);
     
     figure
     plot(numCamps, occPer*100);
     ylabel('Campsite occupation percentage ( % )','FontSize',14);
-xlabel('Number of campsites ( Y )','FontSize',14);
-set(gca,'FontSize',14);
-grid();
-print ('inc_camp_count_occu', '-dpdf');
-print ('inc_camp_count_occu', '-dpng');
-close;
+    xlabel('Number of campsites ( Y )','FontSize',14);
+    set(gca,'FontSize',14);
+    grid();
+    print (['inc_camp_count_occu_' afn], '-dpdf');
+    print (['inc_camp_count_occu_' afn], '-dpng');
+    close;
+    

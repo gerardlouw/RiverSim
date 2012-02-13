@@ -67,7 +67,7 @@ public abstract class Boat implements Comparable<Boat> {
 			if (runningLate()) 
 			{
 				// Search right of goal
-				for (intent = origIntent; intent < upperBound; intent++)
+				for (intent = origIntent; intent <= upperBound; intent++)
 				{
 					if(!occupied[intent])
 					{
@@ -97,7 +97,7 @@ public abstract class Boat implements Comparable<Boat> {
 					}
 				}
 				// Search right of goal
-				for (intent = origIntent; intent < upperBound; intent++)
+				for (intent = origIntent; intent <= upperBound; intent++)
 				{
 					if(!occupied[intent])
 					{
