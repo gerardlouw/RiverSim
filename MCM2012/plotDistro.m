@@ -17,17 +17,17 @@ function plotDistro(mbDis, obDis, gmbDis, gobDis, fileName, title_, occPer, f, h
     hold all;
     plot(x,gtotalDis*max(totalDis)/max(gtotalDis),'kp--');
 
-    title([title_ ' : ' (num2str(round(occPer*10000)/100)) '% occupancy'],'FontSize',14);
+    title([title_ ' : ' (num2str(round(occPer*10000)/100)) '% occupancy'],'FontSize',15);
     legend('Motorboat','Oarboat','Total','Goal distribution','Location','Best');
-    xlabel('Trip duration (days)','FontSize',14);
-    ylabel('Number of successful trips','FontSize',14);
+    xlabel('Trip duration (days)','FontSize',15);
+    ylabel('Number of successful trips','FontSize',15);
     if max(totalDis) ~= 0, 
         axis([4 20 0 1.1*max(totalDis)]);
     end
-    set(gca,'XTick',4:1:20,'FontSize',14);
+    set(gca,'XTick',4:1:20,'FontSize',15);
     grid();
-    print (fileName, '-dpdf');
-    print (fileName, '-dpng');
+    saveas(gcf,[fileName '.png']);
+    saveas(gcf,[fileName '.pdf']);
     close;
     
     if(fexist),

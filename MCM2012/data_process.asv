@@ -23,12 +23,13 @@ ylabel('Trips','FontSize',14);
 xlabel('Number of campsites (Y)','FontSize',14);
 set(gca,'FontSize',14);
 grid();
+inc_camp_count_
 print ('inc_camp_count_sum', '-dpdf');
 print ('inc_camp_count_sum', '-dpng');
 
 figure(f12);
 hold all;
-legend('t_a', '{\Phi}_1', '{\Phi}_2', 'Random', 'Location', 'Best');
+legend('{\Phi}_1', '{\Phi}_2', '{\Phi}_3', 'Random', 'Location', 'Best');
 ylabel('Campsite occupation percentage (%)','FontSize',14);
 xlabel('Number of campsites (Y)','FontSize',14);
 set(gca,'FontSize',14);
@@ -39,7 +40,7 @@ print ('inc_camp_count_occu_sum', '-dpng');
 
 figure(f21);
 hold all;
-legend('t_a', '{\Phi}_1', '{\Phi}_2', 'Random', 'Location', 'Best');
+legend('{\Phi}_1', '{\Phi}_2', '{\Phi}_3', 'Random', 'Location', 'Best');
 ylabel('Trips','FontSize',14);
 xlabel('Number of campsites (Y)','FontSize',14);
 set(gca,'FontSize',14);
@@ -49,7 +50,7 @@ print ('inc_camp_count_sum_inf', '-dpng');
 
 figure(f22);
 hold all;
-legend('t_a', '{\Phi}_1', '{\Phi}_2', 'Random', 'Location', 'Best');
+legend('{\Phi}_1', '{\Phi}_2', '{\Phi}_3', 'Random', 'Location', 'Best');
 ylabel('Campsite occupation percentage (%)','FontSize',14);
 xlabel('Number of campsites (Y)','FontSize',14);
 set(gca,'FontSize',14);

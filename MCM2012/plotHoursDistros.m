@@ -39,22 +39,24 @@ function plotHoursDistros(filePrefix, campCount, title_, mb)
     hold on;
     hold all;
     xlim([4 20]);
-    xlabel('Trip duration (days)','FontSize',14);
-    ylabel('Number of successful trips','FontSize',14);
+    set(gca,'FontSize',15);
+    xlabel('Trip duration (days)','FontSize',15);
+    ylabel('Number of successful trips','FontSize',15);
     legend('show');
     grid();
-    print ([xFilePrefix '_mb_sum'], '-dpdf');
-    print ([xFilePrefix '_mb_sum'], '-dpng');
+    saveas(gcf,[xFilePrefix '_mb_sum' '.pdf']);
+    saveas(gcf,[xFilePrefix '_mb_sum' '.png']);
     else
     figure(f2);
     hold on;
     hold all;
     xlim([4 20]);
-    xlabel('Trip duration (days)','FontSize',14);
-    ylabel('Number of successful trips','FontSize',14);
+    set(gca,'FontSize',15);
+    xlabel('Trip duration (days)','FontSize',15);
+    ylabel('Number of successful trips','FontSize',15);
     legend('show');
     grid();
-    print ([xFilePrefix '_ob_sum'], '-dpdf');
-    print ([xFilePrefix '_ob_sum'], '-dpng');
+    saveas(gcf,[xFilePrefix '_ob_sum' '.pdf']);
+    saveas(gcf,[xFilePrefix '_ob_sum' '.png']);
     end;
     

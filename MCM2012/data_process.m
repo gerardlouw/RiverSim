@@ -18,44 +18,44 @@ plotIncCamp('rand_inf',f21,f22);
 
 figure(f11);
 hold all;
+set(gca,'FontSize',15);
 legend('{\Phi}_1', '{\Phi}_2', '{\Phi}_3', 'Random', 'Location', 'Best');
-ylabel('Trips','FontSize',14);
-xlabel('Number of campsites (Y)','FontSize',14);
-set(gca,'FontSize',14);
+ylabel('Trips','FontSize',15);
+xlabel('Number of campsites (Y)','FontSize',15);
 grid();
-print ('inc_camp_count_sum', '-dpdf');
-print ('inc_camp_count_sum', '-dpng');
+saveas(gcf,'inc_camp_count_sum.pdf');
+saveas(gcf,'inc_camp_count_sum.png');
 
 figure(f12);
 hold all;
+set(gca,'FontSize',15);
 legend('{\Phi}_1', '{\Phi}_2', '{\Phi}_3', 'Random', 'Location', 'Best');
-ylabel('Campsite occupation percentage (%)','FontSize',14);
-xlabel('Number of campsites (Y)','FontSize',14);
-set(gca,'FontSize',14);
+ylabel('Campsite occupation percentage (%)','FontSize',15);
+xlabel('Number of campsites (Y)','FontSize',15);
 grid();
-print ('inc_camp_count_occu_sum', '-dpdf');
-print ('inc_camp_count_occu_sum', '-dpng');
+saveas(gcf,'inc_camp_count_occu_sum.pdf');
+saveas(gcf,'inc_camp_count_occu_sum.png');
 
 
 figure(f21);
 hold all;
+set(gca,'FontSize',15);
 legend('{\Phi}_1', '{\Phi}_2', '{\Phi}_3', 'Random', 'Location', 'Best');
-ylabel('Trips','FontSize',14);
-xlabel('Number of campsites (Y)','FontSize',14);
-set(gca,'FontSize',14);
+ylabel('Trips','FontSize',15);
+xlabel('Number of campsites (Y)','FontSize',15);
 grid();
-print ('inc_camp_count_sum_inf', '-dpdf');
-print ('inc_camp_count_sum_inf', '-dpng');
+saveas(gcf,'inc_camp_count_sum_inf.pdf');
+saveas(gcf,'inc_camp_count_sum_inf.png');
 
 figure(f22);
 hold all;
+set(gca,'FontSize',15);
 legend('{\Phi}_1', '{\Phi}_2', '{\Phi}_3', 'Random', 'Location', 'Best');
-ylabel('Campsite occupation percentage (%)','FontSize',14);
-xlabel('Number of campsites (Y)','FontSize',14);
-set(gca,'FontSize',14);
+ylabel('Campsite occupation percentage (%)','FontSize',15);
+xlabel('Number of campsites (Y)','FontSize',15);
 grid();
-print ('inc_camp_count_occu_sum_inf', '-dpdf');
-print ('inc_camp_count_occu_sum_inf', '-dpng');
+saveas(gcf,'inc_camp_count_occu_sum_inf.pdf');
+saveas(gcf,'inc_camp_count_occu_sum_inf.png');
 
 % Process distrobutions
 

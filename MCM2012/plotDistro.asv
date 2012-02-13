@@ -1,4 +1,4 @@
-function plotDistro(mbDis, obDis, gmbDis, gobDis, fileName, title_, occPer, f)
+function plotDistro(mbDis, obDis, gmbDis, gobDis, fileName, title_, occPer, f, hours)
 
     totalDis = mbDis + obDis;
     gtotalDis = gmbDis + gobDis;
@@ -26,6 +26,7 @@ function plotDistro(mbDis, obDis, gmbDis, gobDis, fileName, title_, occPer, f)
     end
     set(gca,'XTick',4:1:20,'FontSize',14);
     grid();
+    hgsave(fileName,'png')
     print (fileName, '-dpdf');
     print (fileName, '-dpng');
     close;
@@ -34,6 +35,6 @@ function plotDistro(mbDis, obDis, gmbDis, gobDis, fileName, title_, occPer, f)
         figure(f);
         hold on;
         hold all;
-        plot(x,totalDis,'',title_);
+        plot(x,totalDis,'DisplayName',[int2str(hours) 'h (' (num2str(round(occPer*10000)/100)) '%)']);
         hold all;
     end;

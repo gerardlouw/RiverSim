@@ -15,12 +15,12 @@ function plotIncCamp(afn,f, f2, title1, title2)
         title(title1);
     end;
     legend('Motorboat trips', 'Oarboat trips', 'Total trips', 'Theoretical throughput','Location','Best');
-    ylabel('Trips','FontSize',14);
-    xlabel('Number of campsites ( Y )','FontSize',14);
-    set(gca,'FontSize',14);
+    ylabel('Trips','FontSize',15);
+    xlabel('Number of campsites (Y)','FontSize',15);
+    set(gca,'FontSize',15);
     grid();
-    print (['inc_camp_count_' afn], '-dpdf');
-    print (['inc_camp_count_' afn], '-dpng');
+    saveas(gcf,['inc_camp_count_' afn '.pdf']);
+    saveas(gcf,['inc_camp_count_' afn '.png']);
     close;
     
     figure(f)
@@ -32,12 +32,12 @@ function plotIncCamp(afn,f, f2, title1, title2)
     if(exist('title2')),
         title(title2);
     end;
-    ylabel('Campsite occupation percentage ( % )','FontSize',14);
-    xlabel('Number of campsites ( Y )','FontSize',14);
-    set(gca,'FontSize',14);
+    ylabel('Campsite occupation percentage (%)','FontSize',15);
+    xlabel('Number of campsites (Y)','FontSize',15);
+    set(gca,'FontSize',15);
     grid();
-    print (['inc_camp_count_occu_' afn], '-dpdf');
-    print (['inc_camp_count_occu_' afn], '-dpng');
+    saveas(gcf,['inc_camp_count_occu_' afn '.pdf']);
+    saveas(gcf,['inc_camp_count_occu_' afn '.png']);
     close;
     
     figure(f2)
