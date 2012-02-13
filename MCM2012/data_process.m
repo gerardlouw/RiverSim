@@ -11,10 +11,10 @@ plotIncCamp('rand',f11,f12);
 
 f21 = figure();
 f22 = figure();
-plotIncCamp('age_inf',f21,f22,'Inf','Inf');
-plotIncCamp('wage_inf',f21,f22,'Inf','Inf');
-plotIncCamp('mov_inf',f21,f22,'Inf','Inf');
-plotIncCamp('rand_inf',f21,f22,'Inf','Inf');
+plotIncCamp('age_inf',f21,f22);
+plotIncCamp('wage_inf',f21,f22);
+plotIncCamp('mov_inf',f21,f22);
+plotIncCamp('rand_inf',f21,f22);
 
 figure(f11);
 hold all;
@@ -44,8 +44,8 @@ ylabel('Trips','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
 grid();
-print ('inc_camp_count_sum', '-dpdf');
-print ('inc_camp_count_sum', '-dpng');
+print ('inc_camp_count_sum_inf', '-dpdf');
+print ('inc_camp_count_sum_inf', '-dpng');
 
 figure(f22);
 hold all;
@@ -54,8 +54,8 @@ ylabel('Campsite occupation percentage ( % )','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
 set(gca,'FontSize',14);
 grid();
-print ('inc_camp_count_occu_sum', '-dpdf');
-print ('inc_camp_count_occu_sum', '-dpng');
+print ('inc_camp_count_occu_sum_inf', '-dpdf');
+print ('inc_camp_count_occu_sum_inf', '-dpng');
 
 % Process distrobutions
 
