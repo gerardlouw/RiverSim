@@ -16,6 +16,7 @@ public class Main {
 		for(int numCamps = 225; numCamps > 0; numCamps -= 225/5)
 		{
 			generateStats_Distrobutions(numCamps);
+			sensitivity_analysis_max_hours(numCamps);
 		}
 		
 	}
@@ -63,6 +64,7 @@ public class Main {
 		generateStats_linDistro(numCamps, ITERATIONS);
 		generateStats_sineDistro(numCamps, ITERATIONS);
 	}
+
 	
 	public static void generateStats_uniDistro(int numCamps, int ITERATIONS) throws IOException
 	{
@@ -133,6 +135,49 @@ public class Main {
 		obf.close();
 	}
 	
+	public static void sensitivity_analysis_max_hours(int numCamps) throws IOException
+	{
+		int ITERATIONS = 10;
+		Stats s;
+		System.out.printf("Sensitivity analysis max_hours (numCamps = %d)***.txt...\n", numCamps);
+		
+		BufferedWriter mb_sf = new BufferedWriter(new FileWriter("sens_analyis_mb_hours_"+numCamps+"_df.txt"));
+		BufferedWriter mb_mbf = new BufferedWriter(new FileWriter("sens_analyis_mb_hours_"+numCamps+"_mbf.txt"));
+		BufferedWriter mb_obf = new BufferedWriter(new FileWriter("sens_analyis_mb_hours_"+numCamps+"_obf.txt"));
+		BufferedWriter ob_sf = new BufferedWriter(new FileWriter("sens_analyis_ob_hours_"+numCamps+"_df.txt"));
+		BufferedWriter ob_mbf = new BufferedWriter(new FileWriter("sens_analyis_ob_hours_"+numCamps+"_mbf.txt"));
+		BufferedWriter ob_obf = new BufferedWriter(new FileWriter("sens_analyis_ob_hours_"+numCamps+"_obf.txt"));
+		Stats.writeHeader(mb_sf,mb_mbf,mb_obf,ITERATIONS);
+		Stats.writeHeader(ob_sf,ob_mbf,ob_obf,ITERATIONS);
+		
+		double [] mbProbs = uniformDistro(Constants.MIN_DAYS, Constants.MAX_DAYS);
+		double [] obProbs = uniformDistro(Constants.MIN_DAYS, Constants.MAX_DAYS);
+		
+		for(int hours = 0; hours <= 24; hours++)
+		{
+			System.out.print(hours+" ");
+			for(int i = 0; i < ITERATIONS; i++)
+			{
+				s = new Stats(numCamps,hours,Constants.STD_OB_HOURS,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,Double.POSITIVE_INFINITY);
+				runSim(s);
+				s.writeFileEntry(mb_sf, mb_mbf, mb_obf);
+				
+				s = new Stats(numCamps,Constants.STD_MB_HOURS,hours,Constants.STD_PRIORITY_BIAS,mbProbs,obProbs,0);
+				runSim(s);
+				s.writeFileEntry(ob_sf, ob_mbf, ob_obf);
+			}
+		}
+		System.out.println();
+		
+		mb_sf.close();
+		mb_mbf.close();
+		mb_obf.close();
+		
+		ob_sf.close();
+		ob_mbf.close();
+		ob_obf.close();
+	}
+	
 	public static void writeDistroFile(double[] mbProbs, double[] obProbs, String fileName) throws IOException
 	{
 		BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
@@ -191,8 +236,13 @@ public class Main {
 			int i;
 			for (i = 0; i < stats.MB_RANGE; i++) {
 				if (occupied[i]) continue;
-				if(i < stats.OB_RANGE){
-					if (mbcount > stats.MB_DIV_OB*obcount){
+				if(Double.isInfinite(stats.MB_DIV_OB))
+				{
+					addMotorBoat(i,stats,occupied,boats);
+					mbcount++;
+				}
+				else if(i < stats.OB_RANGE){
+					if (mbcount >= stats.MB_DIV_OB*obcount){
 						addOarBoat(i,stats,occupied,boats);
 						obcount++;
 					}else{
@@ -202,8 +252,11 @@ public class Main {
 					//b = (Constants.RANDOM.nextDouble() < stats.MB_BIAS) ? new MotorBoat(stats) : new OarBoat(stats);
 				}
 				else{
-					addMotorBoat(i,stats,occupied,boats);
-					mbcount++;
+					if(stats.MB_DIV_OB != 0)
+					{
+						addMotorBoat(i,stats,occupied,boats);
+						mbcount++;
+					}
 				}
 				
 			}

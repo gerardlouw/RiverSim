@@ -55,24 +55,63 @@ public abstract class Boat implements Comparable<Boat> {
 	 */	
 	public boolean move(boolean[] occupied) {
 		int origIntent = Math.min(getDestination(), location + range);
-		//System.out.printf("%s %s %s\n", getDestination(), location, range);
-		int intent;
-		if (runningLate()) {
-			for (intent = origIntent; intent < s.NUM_CAMPS && occupied[intent]
-			    && intent < location + range; intent++);
-			if (occupied[intent])
-				for (intent = origIntent - 1; occupied[intent] && intent > location + 1; intent--);
-		} else {
-			for (intent = origIntent; occupied[intent] && intent > location + 2; intent--);
-			if (occupied[intent])
-				for (intent = origIntent + 1; intent < s.NUM_CAMPS && occupied[intent]
-				    && intent < location + range; intent++);
+		if(range == 0){
+			s.deadlock(age);
+			return false;
 		}
-		if (intent >= 0 && intent <= s.NUM_CAMPS && !occupied[intent]) {
-			location = intent;
-			distLeft = s.NUM_CAMPS - location;
+		if(occupied[origIntent])
+		{
+			int intent;
+			int upperBound = Math.min(location + range, s.NUM_CAMPS);
+			int lowerBound = location + 1;
+			if (runningLate()) 
+			{
+				// Search right of goal
+				for (intent = origIntent; intent < upperBound; intent++)
+				{
+					if(!occupied[intent])
+					{
+						setLocation(intent);
+						return true;
+					}
+				}
+				// Search left of goal
+				for (intent = origIntent - 1; intent >= lowerBound; intent--)
+				{
+					if(!occupied[intent])
+					{
+						setLocation(intent);
+						return true;
+					}
+				}
+			}
+			else 
+			{
+				// Search left of goal
+				for (intent = origIntent - 1; intent >= lowerBound; intent--)
+				{
+					if(!occupied[intent])
+					{
+						setLocation(intent);
+						return true;
+					}
+				}
+				// Search right of goal
+				for (intent = origIntent; intent < upperBound; intent++)
+				{
+					if(!occupied[intent])
+					{
+						setLocation(intent);
+						return true;
+					}
+				}
+			}
+		}
+		else
+		{
+			setLocation(origIntent);
 			return true;
-		} // maybe behave differently if no move is possible
+		}
 		s.deadlock(age);
 		return false;
 	}

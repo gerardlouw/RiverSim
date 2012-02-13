@@ -10,7 +10,7 @@ hold on;
 plot(numCamps,mbTrips,'r');
 plot(numCamps,obTrips,'b');
 plot(numCamps,totalTrips,'k');
-plot(numCamps,optimalTripsTotal,'g');
+plot(numCamps,optimalTripsTotal,'k--');
 legend('Motorboat trips', 'Oarboat trips', 'Total trips', 'Theoretical throughput','Location','Best');
 ylabel('Trips','FontSize',14);
 xlabel('Number of campsites ( Y )','FontSize',14);
