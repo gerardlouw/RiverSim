@@ -1,4 +1,4 @@
-function [mbDis,obDis,index] = getBestDistro(mbDistro,obDistro, gmbDistro, gobDistro)
+function [mbDis,obDis,index,min] = getBestDistro(mbDistro,obDistro, gmbDistro, gobDistro)
     s = size(mbDistro);
     min = 1;
     index = 1;

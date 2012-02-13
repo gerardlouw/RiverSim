@@ -65,7 +65,6 @@ public class Main {
 		generateStats_sineDistro(numCamps, ITERATIONS);
 	}
 
-	
 	public static void generateStats_uniDistro(int numCamps, int ITERATIONS) throws IOException
 	{
 		System.out.printf("Generating uniform distrobutions...\n");
@@ -152,6 +151,8 @@ public class Main {
 		
 		double [] mbProbs = uniformDistro(Constants.MIN_DAYS, Constants.MAX_DAYS);
 		double [] obProbs = uniformDistro(Constants.MIN_DAYS, Constants.MAX_DAYS);
+		writeDistroFile(mbProbs, obProbs, "sens_analyis_mb_hours_"+numCamps+"_dis.txt");
+		writeDistroFile(mbProbs, obProbs, "sens_analyis_ob_hours_"+numCamps+"_dis.txt");
 		
 		for(int hours = 0; hours <= 24; hours++)
 		{

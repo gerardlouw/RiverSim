@@ -264,8 +264,8 @@ public class Stats {
 	public static void writeHeader(BufferedWriter sf, BufferedWriter mbf, BufferedWriter obf, int itterations)
 	{
 		try {
-			sf.write("NUM_CAMPS,MB_TRIPS,OB_TRIPS,TOTAL_TRIPS,OPTIMAL_TRIPS_TOTAL,CAMP_POPULATION_PERCENTAGE\n");
-			sf.write(String.format("%d,%d,%d,%d,%f,%f\n",itterations,itterations, itterations,itterations, (float)itterations,(float)itterations));
+			sf.write("NUM_CAMPS,MB_HOURS,OB_HOURS,MB_TRIPS,OB_TRIPS,TOTAL_TRIPS,OPTIMAL_TRIPS_TOTAL,CAMP_POPULATION_PERCENTAGE\n");
+			sf.write(String.format("%d,%f,%f,%d,%d,%d,%f,%f\n",itterations,(float)itterations,(float)itterations,itterations,itterations,itterations, (float)itterations,(float)itterations));
 			for(int i = 0; i < Constants.MAX_DOCUMENTED_T; i++)
 			{
 				mbf.write(itterations+"");
@@ -291,7 +291,7 @@ public class Stats {
 	public void writeFileEntry(BufferedWriter sf, BufferedWriter mbf, BufferedWriter obf)
 	{
 		try {
-			sf.write(String.format("%d,%d,%d,%d,%f,%f\n",NUM_CAMPS,getTotalTripsMotorBoat(), getTotalTripsOarBoat(),getTotalTrips(), optimalTripsTotal(),campsPopulatedAverage));
+			sf.write(String.format("%d,%f,%f,%d,%d,%d,%f,%f\n",NUM_CAMPS,MB_HOURS,OB_HOURS,getTotalTripsMotorBoat(), getTotalTripsOarBoat(),getTotalTrips(), optimalTripsTotal(),campsPopulatedAverage));
 			for(int i = 0; i < tripsTotalsMotorBoat.length; i++)
 			{
 				mbf.write(tripsTotalsMotorBoat[i]+"");

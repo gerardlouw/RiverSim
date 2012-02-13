@@ -1,6 +1,8 @@
-function [numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfReadAndAverage(fileName)
-    [numCamps,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfRead(fileName);
+function [numCamps,mbHours,obHours,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfReadAndAverage(fileName)
+    [numCamps,mbHours,obHours,mbTrips,obTrips,totalTrips,optimalTripsTotal,occPer,iterationCounts] = dfRead(fileName);
     numCamps = reshapeAndAverage(numCamps,iterationCounts);
+    mbHours = reshapeAndAverage(mbHours,iterationCounts);
+    obHours = reshapeAndAverage(obHours,iterationCounts);
     mbTrips = reshapeAndAverage(mbTrips,iterationCounts);
     obTrips = reshapeAndAverage(obTrips,iterationCounts);
     totalTrips = reshapeAndAverage(totalTrips,iterationCounts);
